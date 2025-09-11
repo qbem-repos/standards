@@ -1,0 +1,30 @@
+# .github/CODEOWNERS
+# Repositório: qbem-repos/standards
+# Donos de código por área de padrão
+
+# --- Geral (review final obrigatório de CTO) ---
+* @otechmista
+
+# --- APIs HTTP ---
+/apis/ @vshmarques @cesarvieiraqbem
+
+# --- Webhooks ---
+/webhooks/ @vshmarques @cesarvieiraqbem
+
+# --- Eventos/Assíncrono ---
+/async/ @vshmarques @nolrenan @cesarvieiraqbem
+
+# --- Observabilidade ---
+/observability/ @wanderms25 @vshmarques
+
+# --- Segurança ---
+/security/ @wanderms25 @vshmarques
+
+# --- UI/Frontend (se houver docs específicos) ---
+/frontend/ @Solangetatiana
+
+# --- Tooling (linters, pre-commit, spectral, etc) ---
+/tooling/ @vshmarques @wanderms25
+
+# --- ADRs ---
+/adr/ @otechmista @vshmarques

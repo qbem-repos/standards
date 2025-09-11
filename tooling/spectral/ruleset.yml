@@ -1,0 +1,201 @@
+# tooling/spectral/ruleset.yaml
+extends:
+  - "spectral:oas" # base de boas práticas OpenAPI
+
+formats:
+  - oas3 # aplica em OpenAPI 3.x
+
+rules:
+  # --- Meta do spec ---
+  openapi-version-3-1:
+    description: "Spec deve usar OpenAPI 3.1.x"
+    message: "Use OpenAPI 3.1.x (info: {value})"
+    severity: error
+    given: "$.openapi"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^3\\.1\\."
+
+  info-title-required:
+    description: "info.title é obrigatório"
+    severity: error
+    given: "$.info.title"
+    then:
+      function: truthy
+
+  info-version-semver:
+    description: "info.version deve ser SemVer (ex.: 1.0.0)"
+    severity: error
+    given: "$.info.version"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:[-+].*)?$"
+
+  servers-https:
+    description: "Todos os servers devem usar HTTPS"
+    severity: error
+    given: "$.servers[*].url"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://"
+
+  # --- Paths & operações ---
+  path-starts-with-version:
+    description: "Todos os paths devem começar com /v{major}/"
+    severity: error
+    given: "$.paths"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: "^/v\\d+(/|$)"
+
+  operation-operationId-unique:
+    # já existe em spectral:oas, reforçando severidade
+    severity: error
+
+  operation-summary-required:
+    description: "Cada operação deve ter summary"
+    severity: error
+    given: "$.paths[*][*]"
+    then:
+      field: "summary"
+      function: truthy
+
+  operation-tags-defined:
+    # garante que tags usadas estejam definidas (regra base já faz parte do extends)
+    severity: error
+
+  operation-success-response:
+    # da base: toda operação precisa de uma resposta 2xx/3xx — manter como error
+    severity: error
+
+  # --- Schemas & estilo ---
+  schema-props-snake_case:
+    description: "Propriedades de schemas devem usar snake_case"
+    severity: error
+    given: "$.components.schemas[*].properties"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-z0-9_]*$"
+
+  schema-object-has-example:
+    description: "Schemas de objeto devem ter example (ajuda DX e testes)"
+    severity: warn
+    given: "$.components.schemas[*]"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            type:
+              const: object
+          required:
+            - type
+      # Se for type: object, exigir example
+  schema-object-has-example-then:
+    description: "Forneça example em schemas de objeto"
+    severity: warn
+    given: "$.components.schemas[*][?(@.type=='object')]"
+    then:
+      field: "example"
+      function: truthy
+
+  # --- Erros & problem+json ---
+  error-schema-exists:
+    description: "Deve existir components.schemas.Error (RFC7807)"
+    severity: error
+    given: "$"
+    then:
+      field: "components.schemas.Error"
+      function: truthy
+
+  error-schema-has-required-fields:
+    description: "Error (problem+json) deve ter campos mínimos"
+    severity: error
+    given: "$.components.schemas.Error.required"
+    then:
+      function: falsy # invertido? Não — validaremos presença via 'schema' abaixo
+  error-schema-structure:
+    description: "Estrutura mínima de Error (RFC7807 + trace_id)"
+    severity: error
+    given: "$.components.schemas.Error"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: [type, properties, required]
+          properties:
+            type: { const: object }
+            required:
+              type: array
+              contains:
+                enum: [type, title, status, trace_id]
+            properties:
+              type: object
+              properties:
+                type: { type: object }
+                title: { type: object }
+                status: { type: object }
+                detail: { type: object }
+                instance: { type: object }
+                trace_id: { type: object }
+
+  responses-4xx-5xx-problem-json:
+    description: "Respostas 4xx/5xx devem documentar application/problem+json"
+    severity: warn
+    given: "$.paths[*][*].responses"
+    then:
+      function: oasDocumentedProblems
+    # Nota: função custom abaixo (see 'functions' & 'functionsOptions')
+
+  # --- Segurança ---
+  security-bearer-defined:
+    description: "Defina BearerAuth (JWT) em components.securitySchemes"
+    severity: error
+    given: "$"
+    then:
+      field: "components.securitySchemes.BearerAuth"
+      function: truthy
+
+  # --- Mídia e cabeçalhos comuns ---
+  json-content-type-default:
+    description: "Respostas devem declarar application/json quando retornam payload JSON"
+    severity: warn
+    given: "$.paths[*][*].responses[*].content"
+    then:
+      function: defined
+      functionOptions:
+        field: "application/json"
+
+functions:
+  # Função utilitária simples: checa existência de uma chave no objeto
+  defined: |
+    function run(input, options, context) {
+      const field = options && options.field;
+      if (!field) return [{ message: "function 'defined' requer 'field' em functionOptions" }];
+      if (input && Object.prototype.hasOwnProperty.call(input, field)) return [];
+      return [{ message: `Conteúdo deve declarar '${field}'` }];
+    }
+
+  # Verifica se há application/problem+json em respostas 4xx/5xx
+  oasDocumentedProblems: |
+    function run(input) {
+      if (typeof input !== 'object' || input === null) return [];
+      const issues = [];
+      for (const [code, resp] of Object.entries(input)) {
+        if (!/^[45]\d{2}$/.test(code)) continue;
+        const content = resp && resp.content;
+        if (!content || !content['application/problem+json']) {
+          issues.push({ message: `Resposta ${code} deve documentar 'application/problem+json'` });
+        }
+      }
+      return issues;
+    }
