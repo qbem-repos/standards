@@ -1,0 +1,124 @@
+{
+  "info": {
+    "name": "QBEM Users API",
+    "_postman_id": "e2f5e1b4-2c74-4c3f-8a9a-1234567890ab",
+    "description": "Coleção de exemplos para a Users API (v1)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Listar usuários",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.qbem.dev/v1/users?cursor=&limit=10",
+          "protocol": "https",
+          "host": ["api", "qbem", "dev"],
+          "path": ["v1", "users"],
+          "query": [
+            { "key": "cursor", "value": "" },
+            { "key": "limit", "value": "10" }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Criar usuário",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "550e8400-e29b-41d4-a716-446655440000",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"joao@example.com\",\n  \"name\": \"João\"\n}"
+        },
+        "url": {
+          "raw": "https://api.qbem.dev/v1/users",
+          "protocol": "https",
+          "host": ["api", "qbem", "dev"],
+          "path": ["v1", "users"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar usuário por ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.qbem.dev/v1/users/{{user_id}}",
+          "protocol": "https",
+          "host": ["api", "qbem", "dev"],
+          "path": ["v1", "users", "{{user_id}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Exemplo de erro (404)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.qbem.dev/v1/users/nao-existe",
+          "protocol": "https",
+          "host": ["api", "qbem", "dev"],
+          "path": ["v1", "users", "nao-existe"]
+        }
+      },
+      "response": [
+        {
+          "name": "404 - Not Found",
+          "originalRequest": {},
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            { "key": "Content-Type", "value": "application/problem+json" }
+          ],
+          "body": "{\n  \"type\": \"https://docs.qbem.dev/errors/not-found\",\n  \"title\": \"Recurso não encontrado\",\n  \"status\": 404,\n  \"detail\": \"User 'nao-existe' não foi localizado\",\n  \"trace_id\": \"ab12cd34\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "token", "value": "seu-jwt-aqui" },
+    { "key": "user_id", "value": "u_123" }
+  ]
+}
