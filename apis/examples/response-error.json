@@ -1,0 +1,8 @@
+{
+  "type": "https://docs.qbem.dev/errors/validation",
+  "title": "Erro de validação",
+  "status": 422,
+  "detail": "Campos inválidos",
+  "trace_id": "ab12cd34",
+  "errors": [{ "field": "email", "message": "formato inválido" }]
+}
