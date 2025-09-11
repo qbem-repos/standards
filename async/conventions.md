@@ -85,7 +85,8 @@ tenant_id=tn_1
 
 * **Entrega**: *at-least-once* por padrão (assuma duplicatas).
 * **Deduplicação** por `event_id` ou `idempotency_key` no consumidor.
-* **Ordenação**: só garantida **por partição**. Use `partition_key` correto (ex.: `order_id`).
+* **Ordenação**: só garantida **por partição**. Use `partition_key`
+correto (ex.: `order_id`).
 * **Retries** com **backoff exponencial** e **DLQ** (Dead Letter Queue).
 * **Time-out** de processamento definido (ex.: 30s).
 

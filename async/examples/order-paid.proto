@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package qbem.users.orders.v1;
+
+// Versão do schema do payload: 1.0.0
+// Regras de breaking: usar novo tópico order-paid-v2 e novo package *.v2
+
+option go_package = "github.com/qbem-repos/contracts/gen/go/orders/v1;ordersv1";
+
+// Envelope mínimo: event_id, event_type, occurred_at, source + data(OrderPaid)
+message Envelope {
+  string event_id    = 1;  // UUID v4
+  string event_type  = 2;  // "orders.order.paid"
+  string occurred_at = 3;  // ISO 8601 (UTC), ex.: 2025-09-11T12:00:00Z
+  string source      = 4;  // "billing-service"
+  Metadata metadata  = 5;  // schema_version etc.
+  OrderPaid data     = 6;
+}
+
+message Metadata {
+  string schema_version = 1; // SemVer, ex.: "1.0.0"
+}
+
+// Exemplo de payload do evento
+message OrderPaid {
+  string order_id = 1;             // "ord_123"
+  string user_id  = 2;             // "u_9"
+  Money  total    = 3;             // { BRL, 12990 }
+  string paid_at  = 4;             // ISO 8601
+}
+
+message Money {
+  string currency = 1;   // "BRL"
+  int64  amount   = 2;   // centavos (12990 = R$129,90)
+}

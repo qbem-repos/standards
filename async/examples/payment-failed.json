@@ -1,0 +1,17 @@
+{
+  "event_id": "8c0f4d9e-4c9c-4d2a-b2c0-9a9a3d1b2a11",
+  "event_type": "billing.payment.failed",
+  "occurred_at": "2025-09-11T12:05:00Z",
+  "source": "billing-service",
+  "metadata": {
+    "schema_version": "1.0.0"
+  },
+  "data": {
+    "payment_id": "pay_987",
+    "order_id": "ord_123",
+    "user_id": "u_9",
+    "amount": { "currency": "BRL", "amount": 12990 },
+    "reason": "insufficient_funds",
+    "attempt": 3
+  }
+}

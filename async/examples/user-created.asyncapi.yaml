@@ -1,0 +1,80 @@
+asyncapi: "3.0.0"
+info:
+  title: Users Events
+  version: "1.0.0"
+  description: Eventos do domínio de usuários (v1 compatível)
+
+defaultContentType: application/json
+
+channels:
+  users-user-created-v1:
+    address: users-user-created-v1
+    messages:
+      userCreated:
+        $ref: "#/components/messages/UserCreated"
+
+components:
+  messages:
+    UserCreated:
+      name: UserCreated
+      title: Usuário criado
+      summary: Emite quando um novo usuário é criado
+      headers:
+        type: object
+        properties:
+          trace_id: { type: string, description: "Correlação de logs/traces" }
+          correlation_id: { type: string, description: "Saga/fluxo" }
+          idempotency_key: { type: string, description: "Deduplicação" }
+          schema_version:
+            {
+              type: string,
+              description: "Versão SemVer do payload",
+              pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:[-+].*)?$",
+            }
+          producer: { type: string, description: "Serviço emissor" }
+          tenant_id: { type: string, description: "Tenant (quando aplicável)" }
+      payload:
+        type: object
+        required: [event_id, event_type, occurred_at, source, data]
+        properties:
+          event_id: { type: string, format: uuid }
+          event_type: { type: string, enum: ["users.user.created"] }
+          occurred_at: { type: string, format: date-time }
+          source: { type: string, example: "users-service" }
+          metadata:
+            type: object
+            properties:
+              schema_version: { type: string, example: "1.0.0" }
+          data:
+            type: object
+            required: [user_id, email, created_at]
+            properties:
+              user_id: { type: string, example: "u_123" }
+              email: { type: string, format: email, example: "ana@example.com" }
+              name: { type: string, nullable: true, example: "Ana" }
+              created_at:
+                {
+                  type: string,
+                  format: date-time,
+                  example: "2025-09-11T12:00:00Z",
+                }
+      examples:
+        - name: default
+          summary: Exemplo de publicação
+          headers:
+            trace_id: "ab12cd34"
+            correlation_id: "onboarding-u_123"
+            idempotency_key: "f0b8f8d3-66b9-4a38-bd79-8f1d8c6a5f69"
+            schema_version: "1.0.0"
+            producer: "users-service"
+          payload:
+            event_id: "f0b8f8d3-66b9-4a38-bd79-8f1d8c6a5f69"
+            event_type: "users.user.created"
+            occurred_at: "2025-09-11T12:00:00Z"
+            source: "users-service"
+            metadata: { schema_version: "1.0.0" }
+            data:
+              user_id: "u_123"
+              email: "ana@example.com"
+              name: "Ana"
+              created_at: "2025-09-11T12:00:00Z"

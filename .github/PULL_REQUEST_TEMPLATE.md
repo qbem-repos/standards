@@ -1,18 +1,19 @@
-# 📥 Pull Request
+# Pull Request
 
-## 🔗 Referência
+## Referência
 <!-- Issue relacionada ou RFC, se aplicável -->
 Closes #
 
 ---
 
-## 📝 Descrição
+## Descrição
 <!-- Explique de forma clara a mudança proposta -->
--
+- ...
 
 ---
 
-## ✅ Checklist
+## Checklist
+
 - [ ] Commits seguem [Conventional Commits](https://www.conventionalcommits.org).
 - [ ] Documentação atualizada (quando necessário).
 - [ ] Exemplos/testes revisados (quando aplicável).
@@ -21,5 +22,5 @@ Closes #
 
 ---
 
-## 📸 Notas adicionais
+## Notas adicionais
 <!-- Prints, diagramas ou explicações extras -->

@@ -8,8 +8,10 @@ Nosso objetivo é equilibrar **autonomia dos times** com **consistência organiz
 ## 📌 Papéis
 
 * **Contribuidores** → qualquer pessoa que proponha mudanças via PR ou issue.
-* **Codeowners** → responsáveis por revisar e aprovar mudanças em suas áreas (APIs, eventos, segurança, etc).
-* **Mantenedores** → responsáveis finais pela aprovação de RFCs/ADRs e pela evolução deste repositório.
+* **Codeowners** → responsáveis por revisar e aprovar mudanças em suas áreas
+(APIs, eventos, segurança, etc).
+* **Mantenedores** → responsáveis finais pela aprovação de RFCs/ADRs
+ e pela evolução deste repositório.
 
 ---
 

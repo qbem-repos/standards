@@ -1,7 +1,8 @@
 # Contribuindo com os Standards
 
 Obrigado por ajudar a melhorar os padrões da QBEM!
-Este repositório é a **fonte da verdade** para APIs, eventos, webhooks, observabilidade e segurança.
+Este repositório é a **fonte da verdade** para APIs, eventos, webhooks,
+observabilidade e segurança.
 Para manter tudo organizado, siga as instruções abaixo.
 
 ---
@@ -13,14 +14,15 @@ Para manter tudo organizado, siga as instruções abaixo.
    * Use o template de *RFC curta* para mudanças em padrões.
 2. **Crie um fork** e trabalhe em um branch descritivo:
 
-   ```
+   ```plain
    git checkout -b feat/api-error-handling
    ```
+
 3. **Faça commits claros** usando [Conventional Commits](https://www.conventionalcommits.org):
 
-   * `feat: adicionar guia de paginação em APIs`
-   * `fix: corrigir exemplo inválido no webhook`
-   * `docs: atualizar checklist de novo serviço`
+   *`feat: adicionar guia de paginação em APIs`
+   *`fix: corrigir exemplo inválido no webhook`
+   *`docs: atualizar checklist de novo serviço`
 4. **Abra um Pull Request**.
 
    * Preencha o template (o “porquê” é tão importante quanto o “como”).
@@ -57,6 +59,5 @@ Para manter tudo organizado, siga as instruções abaixo.
 ---
 
 ## Código de Conduta
-
 Todos devem seguir o [CODE\_OF\_CONDUCT.md](CODE_OF_CONDUCT.md).
 Respeito e colaboração são obrigatórios.
