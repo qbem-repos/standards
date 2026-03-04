@@ -6,7 +6,10 @@ baseurl: "/standards"
 url: "https://qbem-repos.github.io"
 
 # Theme
-theme: jekyll-theme-minimal
+remote_theme: pages-themes/primer@v0.6.0
+
+# Show downloads
+show_downloads: false
 
 # Markdown
 markdown: kramdown
