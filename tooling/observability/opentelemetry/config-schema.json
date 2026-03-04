@@ -1,0 +1,366 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://qbem.net.br/schemas/opentelemetry-config.json",
+  "title": "OpenTelemetry Configuration Schema",
+  "description": "Schema de validação para configurações OpenTelemetry seguindo os padrões QBEM",
+  "type": "object",
+  "required": ["service", "exporters", "instrumentation"],
+  "properties": {
+    "service": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "minLength": 3,
+          "maxLength": 63,
+          "description": "Nome do serviço em kebab-case"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+          "description": "Versão do serviço em SemVer (ex: 1.0.0)"
+        },
+        "namespace": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "Namespace do serviço (opcional, ex: qbem)"
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["development", "staging", "production"],
+          "description": "Ambiente de execução"
+        },
+        "instance_id": {
+          "type": "string",
+          "description": "ID único da instância (ex: pod name, container ID)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "exporters": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["otlp", "jaeger", "zipkin", "console"],
+          "description": "Tipo de exporter (recomendado: otlp)"
+        },
+        "endpoint": {
+          "type": "string",
+          "format": "uri",
+          "description": "Endpoint do collector (ex: http://otel-collector:4317)"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": ["grpc", "http/protobuf", "http/json"],
+          "default": "grpc",
+          "description": "Protocolo de comunicação (recomendado: grpc)"
+        },
+        "headers": {
+          "type": "object",
+          "description": "Headers customizados para o exporter",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000,
+          "default": 10000,
+          "description": "Timeout em milissegundos"
+        },
+        "compression": {
+          "type": "string",
+          "enum": ["none", "gzip"],
+          "default": "gzip",
+          "description": "Compressão de dados"
+        }
+      },
+      "additionalProperties": false
+    },
+    "instrumentation": {
+      "type": "object",
+      "properties": {
+        "traces": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Habilitar tracing"
+            },
+            "sampling": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["always_on", "always_off", "trace_id_ratio", "parent_based"],
+                  "description": "Tipo de sampler (recomendado: parent_based)"
+                },
+                "ratio": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Taxa de sampling para trace_id_ratio (ex: 0.1 = 10%)"
+                },
+                "parent_sampler": {
+                  "type": "object",
+                  "description": "Sampler raiz para parent_based",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["trace_id_ratio", "always_on", "always_off"]
+                    },
+                    "ratio": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "propagation": {
+              "type": "object",
+              "properties": {
+                "format": {
+                  "type": "string",
+                  "enum": ["w3c", "b3", "jaeger"],
+                  "default": "w3c",
+                  "description": "Formato de propagação (obrigatório: w3c)"
+                }
+              },
+              "additionalProperties": false
+            },
+            "span_limits": {
+              "type": "object",
+              "properties": {
+                "max_attributes": {
+                  "type": "integer",
+                  "minimum": 32,
+                  "maximum": 256,
+                  "default": 128,
+                  "description": "Máximo de atributos por span"
+                },
+                "max_events": {
+                  "type": "integer",
+                  "minimum": 32,
+                  "maximum": 256,
+                  "default": 128,
+                  "description": "Máximo de eventos por span"
+                },
+                "max_links": {
+                  "type": "integer",
+                  "minimum": 32,
+                  "maximum": 256,
+                  "default": 128,
+                  "description": "Máximo de links por span"
+                },
+                "max_attribute_value_length": {
+                  "type": "integer",
+                  "minimum": 256,
+                  "maximum": 8192,
+                  "default": 4096,
+                  "description": "Tamanho máximo de valor de atributo"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "metrics": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Habilitar métricas"
+            },
+            "export_interval_ms": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 60000,
+              "default": 60000,
+              "description": "Intervalo de export em milissegundos"
+            },
+            "export_timeout_ms": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 60000,
+              "default": 30000,
+              "description": "Timeout de export em milissegundos"
+            }
+          },
+          "additionalProperties": false
+        },
+        "logs": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Habilitar logs (experimental)"
+            },
+            "level": {
+              "type": "string",
+              "enum": ["trace", "debug", "info", "warn", "error", "fatal"],
+              "default": "info",
+              "description": "Nível mínimo de log"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "processors": {
+      "type": "object",
+      "properties": {
+        "batch": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "description": "Habilitar batch processor (recomendado)"
+            },
+            "max_queue_size": {
+              "type": "integer",
+              "minimum": 512,
+              "maximum": 8192,
+              "default": 2048,
+              "description": "Tamanho máximo da fila"
+            },
+            "schedule_delay_ms": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 10000,
+              "default": 5000,
+              "description": "Intervalo de envio em milissegundos"
+            },
+            "export_timeout_ms": {
+              "type": "integer",
+              "minimum": 1000,
+              "maximum": 60000,
+              "default": 30000,
+              "description": "Timeout de export"
+            },
+            "max_export_batch_size": {
+              "type": "integer",
+              "minimum": 128,
+              "maximum": 2048,
+              "default": 512,
+              "description": "Tamanho máximo do batch"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "resource_attributes": {
+      "type": "object",
+      "description": "Atributos adicionais do resource",
+      "properties": {
+        "host.name": {
+          "type": "string",
+          "description": "Nome do host"
+        },
+        "k8s.namespace.name": {
+          "type": "string",
+          "description": "Namespace Kubernetes"
+        },
+        "k8s.pod.name": {
+          "type": "string",
+          "description": "Nome do pod"
+        },
+        "k8s.deployment.name": {
+          "type": "string",
+          "description": "Nome do deployment"
+        },
+        "cloud.provider": {
+          "type": "string",
+          "enum": ["aws", "gcp", "azure", "alicloud"],
+          "description": "Provider de cloud"
+        },
+        "cloud.region": {
+          "type": "string",
+          "description": "Região do cloud provider"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "service": {
+        "name": "order-service",
+        "version": "1.2.3",
+        "namespace": "qbem",
+        "environment": "production"
+      },
+      "exporters": {
+        "type": "otlp",
+        "endpoint": "http://otel-collector:4317",
+        "protocol": "grpc",
+        "timeout_ms": 10000,
+        "compression": "gzip"
+      },
+      "instrumentation": {
+        "traces": {
+          "enabled": true,
+          "sampling": {
+            "type": "parent_based",
+            "parent_sampler": {
+              "type": "trace_id_ratio",
+              "ratio": 0.1
+            }
+          },
+          "propagation": {
+            "format": "w3c"
+          },
+          "span_limits": {
+            "max_attributes": 128,
+            "max_events": 128,
+            "max_links": 128,
+            "max_attribute_value_length": 4096
+          }
+        },
+        "metrics": {
+          "enabled": true,
+          "export_interval_ms": 60000,
+          "export_timeout_ms": 30000
+        },
+        "logs": {
+          "enabled": false,
+          "level": "info"
+        }
+      },
+      "processors": {
+        "batch": {
+          "enabled": true,
+          "max_queue_size": 2048,
+          "schedule_delay_ms": 5000,
+          "export_timeout_ms": 30000,
+          "max_export_batch_size": 512
+        }
+      },
+      "resource_attributes": {
+        "k8s.namespace.name": "production",
+        "k8s.deployment.name": "order-service",
+        "cloud.provider": "aws",
+        "cloud.region": "us-east-1"
+      }
+    }
+  ]
+}

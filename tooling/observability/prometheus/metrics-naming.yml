@@ -1,0 +1,497 @@
+# Schema de Validação para Nomenclatura de Métricas Prometheus
+# Baseado nos padrões de Observabilidade QBEM
+#
+# Uso:
+#   Use este arquivo como referência para validar se suas métricas
+#   seguem as convenções de nomenclatura do Prometheus e QBEM.
+#
+# Validação manual:
+#   grep -E "^[a-z][a-z0-9_]*_(total|seconds|bytes|ratio|count|sum|bucket)$" metrics.prom
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Convenções de Nomenclatura
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+naming_conventions:
+  # Formato geral: <namespace>_<subsystem>_<name>_<unit>_<suffix>
+  pattern: "^[a-z][a-z0-9_]*$"
+  case: "snake_case"
+  min_length: 3
+  max_length: 100
+
+  # Prefixos obrigatórios por tipo
+  namespaces:
+    - name: "http_"
+      description: "Métricas relacionadas a HTTP"
+      examples:
+        - "http_requests_total"
+        - "http_request_duration_seconds"
+        - "http_requests_in_progress"
+
+    - name: "grpc_"
+      description: "Métricas relacionadas a gRPC"
+      examples:
+        - "grpc_server_handled_total"
+        - "grpc_server_handling_seconds"
+
+    - name: "db_"
+      description: "Métricas de banco de dados"
+      examples:
+        - "db_query_duration_seconds"
+        - "db_connections_active"
+        - "db_queries_total"
+
+    - name: "cache_"
+      description: "Métricas de cache"
+      examples:
+        - "cache_hits_total"
+        - "cache_misses_total"
+        - "cache_size_bytes"
+
+    - name: "queue_"
+      description: "Métricas de filas"
+      examples:
+        - "queue_depth"
+        - "queue_messages_total"
+
+    - name: "job_"
+      description: "Métricas de background jobs"
+      examples:
+        - "job_processing_duration_seconds"
+        - "job_processed_total"
+        - "job_queue_depth"
+
+    - name: "message_"
+      description: "Métricas de mensageria (Kafka, SQS, etc)"
+      examples:
+        - "message_produced_total"
+        - "message_consumed_total"
+        - "consumer_lag"
+
+  # Sufixos obrigatórios por tipo de métrica
+  suffixes:
+    counter:
+      - "_total"
+      description: "Counters devem terminar com _total"
+      examples:
+        - "http_requests_total"
+        - "errors_total"
+        - "cache_hits_total"
+
+    histogram:
+      - "_seconds"
+      - "_bytes"
+      description: "Histograms devem incluir a unidade"
+      examples:
+        - "http_request_duration_seconds"
+        - "response_size_bytes"
+      auto_suffixes:
+        - "_bucket"  # Adicionado automaticamente
+        - "_count"   # Adicionado automaticamente
+        - "_sum"     # Adicionado automaticamente
+
+    gauge:
+      - ""  # Sem sufixo obrigatório
+      description: "Gauges podem ou não ter sufixo de unidade"
+      examples:
+        - "db_connections_active"
+        - "memory_usage_bytes"
+        - "temperature_celsius"
+
+    summary:
+      - "_seconds"
+      - "_bytes"
+      description: "Summaries devem incluir a unidade"
+      auto_suffixes:
+        - "_count"  # Adicionado automaticamente
+        - "_sum"    # Adicionado automaticamente
+
+  # Unidades padronizadas
+  units:
+    time:
+      - "seconds"      # Preferencial (não milliseconds)
+      description: "Sempre use segundos para tempo"
+      examples:
+        - "http_request_duration_seconds"
+        - "job_processing_duration_seconds"
+
+    size:
+      - "bytes"        # Preferencial (não kilobytes, megabytes)
+      description: "Sempre use bytes para tamanho"
+      examples:
+        - "response_size_bytes"
+        - "memory_usage_bytes"
+        - "cache_size_bytes"
+
+    ratio:
+      - "ratio"        # 0.0 a 1.0
+      description: "Use ratio para proporções (0-1)"
+      examples:
+        - "cache_hit_ratio"
+        - "cpu_usage_ratio"
+
+    percentage:
+      - "percent"      # 0 a 100
+      description: "Use percent para porcentagens (evite, prefira ratio)"
+      examples:
+        - "error_percent"  # Evite, use error_ratio
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Labels Obrigatórios
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+required_labels:
+  all_metrics:
+    - name: "service"
+      description: "Nome do serviço"
+      pattern: "^[a-z][a-z0-9-]*$"
+      example: "order-service"
+
+    - name: "environment"
+      description: "Ambiente de execução"
+      allowed_values: ["production", "staging", "development"]
+      example: "production"
+
+    - name: "version"
+      description: "Versão do serviço (SemVer)"
+      pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)"
+      example: "1.2.3"
+
+  http_metrics:
+    - name: "method"
+      description: "Método HTTP"
+      allowed_values: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+      example: "POST"
+
+    - name: "path"
+      description: "Path da URL (normalizado, sem IDs)"
+      pattern: "^/.*$"
+      example: "/v1/orders/:id"
+      warnings:
+        - "Evite IDs no path (use /users/:id não /users/123)"
+        - "Use template do route, não path real"
+
+    - name: "status_code"
+      description: "HTTP status code"
+      pattern: "^[1-5][0-9]{2}$"
+      example: "200"
+      warnings:
+        - "Considere agrupar: 2xx, 3xx, 4xx, 5xx para reduzir cardinalidade"
+
+  grpc_metrics:
+    - name: "grpc_service"
+      description: "Nome do serviço gRPC"
+      pattern: "^[A-Z][a-zA-Z0-9]*$"
+      example: "OrderService"
+
+    - name: "grpc_method"
+      description: "Método gRPC"
+      pattern: "^[A-Z][a-zA-Z0-9]*$"
+      example: "CreateOrder"
+
+    - name: "grpc_code"
+      description: "Código de status gRPC"
+      allowed_values: ["OK", "CANCELLED", "UNKNOWN", "INVALID_ARGUMENT", "DEADLINE_EXCEEDED", "NOT_FOUND", "ALREADY_EXISTS", "PERMISSION_DENIED", "RESOURCE_EXHAUSTED", "FAILED_PRECONDITION", "ABORTED", "OUT_OF_RANGE", "UNIMPLEMENTED", "INTERNAL", "UNAVAILABLE", "DATA_LOSS", "UNAUTHENTICATED"]
+      example: "OK"
+
+  database_metrics:
+    - name: "database"
+      description: "Nome do banco de dados"
+      pattern: "^[a-z][a-z0-9_]*$"
+      example: "postgres"
+
+    - name: "operation"
+      description: "Operação SQL"
+      allowed_values: ["SELECT", "INSERT", "UPDATE", "DELETE", "BEGIN", "COMMIT", "ROLLBACK"]
+      example: "SELECT"
+
+  job_metrics:
+    - name: "job_type"
+      description: "Tipo de job"
+      pattern: "^[a-z][a-z0-9_-]*$"
+      example: "send-email"
+
+    - name: "status"
+      description: "Status de execução"
+      allowed_values: ["success", "failed", "timeout", "cancelled"]
+      example: "success"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Cardinalidade
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cardinality:
+  max_unique_values_per_label: 20
+  warning_threshold: 10
+
+  # Labels que NÃO devem ser usados (alta cardinalidade)
+  forbidden_labels:
+    - name: "user_id"
+      reason: "Alta cardinalidade (milhões de valores únicos)"
+      alternative: "Use logs ou traces para user_id específico"
+
+    - name: "trace_id"
+      reason: "Único por requisição"
+      alternative: "Use traces para correlação"
+
+    - name: "request_id"
+      reason: "Único por requisição"
+      alternative: "Use logs para request_id específico"
+
+    - name: "session_id"
+      reason: "Alta cardinalidade"
+      alternative: "Use logs ou traces"
+
+    - name: "timestamp"
+      reason: "Único por medição"
+      alternative: "Prometheus já adiciona timestamp automaticamente"
+
+    - name: "email"
+      reason: "PII + alta cardinalidade"
+      alternative: "Não usar"
+
+    - name: "ip"
+      reason: "Alta cardinalidade"
+      alternative: "Use logs para IP específico"
+
+  # Boas práticas para reduzir cardinalidade
+  best_practices:
+    - rule: "Agrupe paths similares"
+      bad_example: "path=/users/123"
+      good_example: "path=/users/:id"
+
+    - rule: "Agrupe status codes"
+      bad_example: "status_code=200, status_code=201, status_code=204"
+      good_example: "status_code=2xx, status_code=4xx, status_code=5xx"
+
+    - rule: "Limite valores de enums"
+      bad_example: "error_type com 500 valores diferentes"
+      good_example: "error_type com 5-10 categorias"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Exemplos de Métricas Válidas
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+valid_examples:
+  # Counter
+  - name: "http_requests_total"
+    type: "counter"
+    help: "Total HTTP requests"
+    labels: ["service", "environment", "method", "path", "status_code"]
+
+  # Histogram
+  - name: "http_request_duration_seconds"
+    type: "histogram"
+    help: "HTTP request duration in seconds"
+    labels: ["service", "environment", "method", "path"]
+    buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
+
+  # Gauge
+  - name: "db_connections_active"
+    type: "gauge"
+    help: "Number of active database connections"
+    labels: ["service", "environment", "database"]
+
+  # Business metric
+  - name: "orders_created_total"
+    type: "counter"
+    help: "Total orders created"
+    labels: ["service", "environment", "payment_method", "status"]
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Exemplos de Métricas Inválidas
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+invalid_examples:
+  - name: "httpRequests"
+    reason: "camelCase não permitido (use snake_case)"
+    fix: "http_requests_total"
+
+  - name: "http_requests"
+    reason: "Counter sem sufixo _total"
+    fix: "http_requests_total"
+
+  - name: "request_duration_ms"
+    reason: "Unidade deve ser segundos, não milissegundos"
+    fix: "request_duration_seconds"
+
+  - name: "cache_hit_percentage"
+    reason: "Use ratio (0-1) ao invés de percentage (0-100)"
+    fix: "cache_hit_ratio"
+
+  - name: "HTTP_REQUESTS_TOTAL"
+    reason: "UPPER_CASE não permitido"
+    fix: "http_requests_total"
+
+  - name: "http-requests-total"
+    reason: "kebab-case não permitido (use snake_case)"
+    fix: "http_requests_total"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Regras de Validação
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+validation_rules:
+  # Regra 1: snake_case obrigatório
+  - id: "R001"
+    name: "snake_case_naming"
+    severity: "error"
+    pattern: "^[a-z][a-z0-9_]*$"
+    message: "Métrica deve usar snake_case"
+
+  # Regra 2: Counter deve ter _total
+  - id: "R002"
+    name: "counter_suffix"
+    severity: "error"
+    condition: "type == 'counter'"
+    pattern: ".*_total$"
+    message: "Counter deve terminar com _total"
+
+  # Regra 3: Histogram deve ter unidade
+  - id: "R003"
+    name: "histogram_unit"
+    severity: "error"
+    condition: "type == 'histogram'"
+    pattern: ".*(seconds|bytes|ratio)(_bucket|_count|_sum)?$"
+    message: "Histogram deve incluir unidade (seconds, bytes, ratio)"
+
+  # Regra 4: Use segundos, não milissegundos
+  - id: "R004"
+    name: "use_seconds_not_milliseconds"
+    severity: "error"
+    forbidden_patterns: [".*_(ms|milliseconds|millis)$"]
+    message: "Use segundos (_seconds), não milissegundos"
+
+  # Regra 5: Limite de cardinalidade
+  - id: "R005"
+    name: "cardinality_limit"
+    severity: "warning"
+    max_labels: 5
+    max_unique_values_per_label: 20
+    message: "Alta cardinalidade detectada (> 20 valores únicos)"
+
+  # Regra 6: Labels obrigatórios
+  - id: "R006"
+    name: "required_labels"
+    severity: "error"
+    required_labels: ["service", "environment"]
+    message: "Labels 'service' e 'environment' são obrigatórios"
+
+  # Regra 7: Evite labels de alta cardinalidade
+  - id: "R007"
+    name: "forbidden_labels"
+    severity: "error"
+    forbidden_labels: ["user_id", "trace_id", "request_id", "session_id", "email", "ip"]
+    message: "Label de alta cardinalidade detectado"
+
+  # Regra 8: Help text obrigatório
+  - id: "R008"
+    name: "help_text_required"
+    severity: "warning"
+    message: "Métrica deve ter HELP text descritivo"
+
+  # Regra 9: Type declaration obrigatório
+  - id: "R009"
+    name: "type_required"
+    severity: "error"
+    message: "Métrica deve ter TYPE declaration"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Métricas Obrigatórias por Tipo de Serviço
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+required_metrics:
+  http_api:
+    - name: "http_requests_total"
+      type: "counter"
+      labels: ["service", "environment", "method", "path", "status_code"]
+
+    - name: "http_request_duration_seconds"
+      type: "histogram"
+      labels: ["service", "environment", "method", "path"]
+
+    - name: "http_requests_in_progress"
+      type: "gauge"
+      labels: ["service", "environment", "method", "path"]
+
+  grpc_service:
+    - name: "grpc_server_handled_total"
+      type: "counter"
+      labels: ["service", "environment", "grpc_service", "grpc_method", "grpc_code"]
+
+    - name: "grpc_server_handling_seconds"
+      type: "histogram"
+      labels: ["service", "environment", "grpc_service", "grpc_method"]
+
+  background_jobs:
+    - name: "job_processed_total"
+      type: "counter"
+      labels: ["service", "environment", "job_type", "status"]
+
+    - name: "job_processing_duration_seconds"
+      type: "histogram"
+      labels: ["service", "environment", "job_type"]
+
+    - name: "job_queue_depth"
+      type: "gauge"
+      labels: ["service", "environment", "queue_name"]
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Buckets Recomendados
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+recommended_buckets:
+  http_api_latency:
+    # Buckets para latência de API (segundos)
+    values: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10]
+    description: "5ms, 10ms, 25ms, 50ms, 100ms, 250ms, 500ms, 1s, 2.5s, 5s, 10s"
+
+  database_query_latency:
+    # Buckets para queries de banco (segundos)
+    values: [0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1]
+    description: "1ms, 5ms, 10ms, 25ms, 50ms, 100ms, 250ms, 500ms, 1s"
+
+  job_processing_duration:
+    # Buckets para background jobs (segundos)
+    values: [0.1, 0.5, 1, 5, 10, 30, 60, 120, 300]
+    description: "100ms, 500ms, 1s, 5s, 10s, 30s, 1min, 2min, 5min"
+
+  response_size:
+    # Buckets para tamanho de resposta (bytes)
+    values: [128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]
+    description: "128B, 256B, 512B, 1KB, 2KB, 4KB, 8KB, 16KB, 32KB, 64KB"
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Checklist de Conformidade
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+checklist:
+  - item: "Nome da métrica em snake_case"
+    rule: "R001"
+
+  - item: "Counter termina com _total"
+    rule: "R002"
+
+  - item: "Histogram/Summary tem unidade (_seconds, _bytes)"
+    rule: "R003"
+
+  - item: "Usa segundos, não milissegundos"
+    rule: "R004"
+
+  - item: "Labels service e environment presentes"
+    rule: "R006"
+
+  - item: "Sem labels de alta cardinalidade (user_id, trace_id, etc)"
+    rule: "R007"
+
+  - item: "HELP text descritivo presente"
+    rule: "R008"
+
+  - item: "TYPE declaration presente"
+    rule: "R009"
+
+  - item: "Buckets apropriados para histograms"
+    rule: "Recomendação"
+
+  - item: "Máximo 5 labels por métrica"
+    rule: "R005"

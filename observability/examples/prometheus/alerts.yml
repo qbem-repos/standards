@@ -1,0 +1,276 @@
+# Exemplo de Regras de Alerta para Prometheus
+# Baseado nos padrões de Observabilidade QBEM
+#
+# Uso:
+#   1. Coloque este arquivo em /etc/prometheus/rules/
+#   2. Configure prometheus.yml:
+#      rule_files:
+#        - "/etc/prometheus/rules/*.yml"
+#   3. Reload: curl -X POST http://localhost:9090/-/reload
+
+groups:
+  # Alertas de Disponibilidade (Availability)
+  - name: availability_alerts
+    interval: 30s
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[5m])) by (service)
+            /
+            sum(rate(http_requests_total[5m])) by (service)
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "High error rate on {{ $labels.service }}"
+          description: "Error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/high-error-rate"
+
+      - alert: ServiceDown
+        expr: up{job=~".*"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Service {{ $labels.job }} is down"
+          description: "{{ $labels.instance }} has been down for more than 2 minutes"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/service-down"
+
+  # Alertas de Latência (Latency)
+  - name: latency_alerts
+    interval: 30s
+    rules:
+      - alert: HighLatencyP95
+        expr: |
+          histogram_quantile(0.95,
+            rate(http_request_duration_seconds_bucket[5m])
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: high
+          category: latency
+        annotations:
+          summary: "High p95 latency on {{ $labels.service }}"
+          description: "p95 latency is {{ $value }}s (threshold: 1s)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/high-latency"
+
+      - alert: HighLatencyP99
+        expr: |
+          histogram_quantile(0.99,
+            rate(http_request_duration_seconds_bucket[5m])
+          ) > 2.0
+        for: 5m
+        labels:
+          severity: high
+          category: latency
+        annotations:
+          summary: "High p99 latency on {{ $labels.service }}"
+          description: "p99 latency is {{ $value }}s (threshold: 2s)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/high-latency"
+
+  # Alertas de Error Budget
+  - name: error_budget_alerts
+    interval: 1m
+    rules:
+      - alert: ErrorBudgetBurnRateFast
+        expr: |
+          (
+            (1 - (sum(rate(http_requests_total{status_code=~"2..|3.."}[1h])) by (service)
+                  / sum(rate(http_requests_total[1h])) by (service)))
+            / (1 - 0.999)
+          ) > 10
+        for: 5m
+        labels:
+          severity: critical
+          category: error_budget
+        annotations:
+          summary: "Fast error budget burn on {{ $labels.service }}"
+          description: "Error budget is being consumed {{ $value }}x faster than normal. At this rate, budget will be exhausted in 3 days."
+          runbook_url: "https://wiki.qbem.net.br/runbooks/error-budget-burn"
+
+      - alert: ErrorBudgetLow
+        expr: |
+          (
+            (sum(rate(http_requests_total{status_code=~"2..|3.."}[30d])) by (service)
+             / sum(rate(http_requests_total[30d])) by (service))
+            - 0.999
+          ) / (1 - 0.999) < 0.25
+        for: 15m
+        labels:
+          severity: high
+          category: error_budget
+        annotations:
+          summary: "Low error budget on {{ $labels.service }}"
+          description: "Only {{ $value | humanizePercentage }} of error budget remains for the month"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/error-budget-low"
+
+  # Alertas de Saturação (Saturation)
+  - name: saturation_alerts
+    interval: 1m
+    rules:
+      - alert: HighCPUUsage
+        expr: |
+          (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) by (instance)) > 0.8
+        for: 15m
+        labels:
+          severity: high
+          category: saturation
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanizePercentage }} (threshold: 80%)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/high-cpu"
+
+      - alert: HighMemoryUsage
+        expr: |
+          (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.9
+        for: 10m
+        labels:
+          severity: high
+          category: saturation
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanizePercentage }} (threshold: 90%)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/high-memory"
+
+      - alert: HighDiskUsage
+        expr: |
+          (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) > 0.85
+        for: 10m
+        labels:
+          severity: high
+          category: saturation
+        annotations:
+          summary: "High disk usage on {{ $labels.instance }}"
+          description: "Disk usage is {{ $value | humanizePercentage }} on {{ $labels.mountpoint }}"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/high-disk"
+
+  # Alertas de Database
+  - name: database_alerts
+    interval: 1m
+    rules:
+      - alert: SlowDatabaseQueries
+        expr: |
+          histogram_quantile(0.95,
+            rate(db_query_duration_seconds_bucket[5m])
+          ) > 1.0
+        for: 10m
+        labels:
+          severity: high
+          category: database
+        annotations:
+          summary: "Slow database queries on {{ $labels.database }}"
+          description: "p95 query duration is {{ $value }}s (threshold: 1s)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/slow-queries"
+
+      - alert: DatabaseConnectionPoolExhaustion
+        expr: |
+          (db_connections_active / db_connections_max) > 0.9
+        for: 5m
+        labels:
+          severity: high
+          category: database
+        annotations:
+          summary: "Database connection pool near exhaustion"
+          description: "{{ $labels.database }} connection pool is {{ $value | humanizePercentage }} full"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/db-connections"
+
+  # Alertas de Cache
+  - name: cache_alerts
+    interval: 1m
+    rules:
+      - alert: LowCacheHitRate
+        expr: |
+          (
+            sum(rate(cache_hits_total[5m])) by (service, cache_name)
+            /
+            (sum(rate(cache_hits_total[5m])) by (service, cache_name) + sum(rate(cache_misses_total[5m])) by (service, cache_name))
+          ) < 0.5
+        for: 15m
+        labels:
+          severity: medium
+          category: cache
+        annotations:
+          summary: "Low cache hit rate on {{ $labels.cache_name }}"
+          description: "Cache hit rate is {{ $value | humanizePercentage }} (threshold: 50%)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/low-cache-hit-rate"
+
+  # Alertas de Background Jobs
+  - name: job_alerts
+    interval: 1m
+    rules:
+      - alert: HighJobFailureRate
+        expr: |
+          (
+            sum(rate(job_processed_total{status="failed"}[5m])) by (service, job_type)
+            /
+            sum(rate(job_processed_total[5m])) by (service, job_type)
+          ) > 0.1
+        for: 10m
+        labels:
+          severity: high
+          category: jobs
+        annotations:
+          summary: "High job failure rate on {{ $labels.job_type }}"
+          description: "Job failure rate is {{ $value | humanizePercentage }} (threshold: 10%)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/job-failures"
+
+      - alert: JobQueueBacklog
+        expr: |
+          job_queue_depth > 1000
+        for: 15m
+        labels:
+          severity: medium
+          category: jobs
+        annotations:
+          summary: "Job queue backlog on {{ $labels.queue_name }}"
+          description: "Queue depth is {{ $value }} messages (threshold: 1000)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/queue-backlog"
+
+  # Alertas de Mensageria (Kafka)
+  - name: messaging_alerts
+    interval: 1m
+    rules:
+      - alert: HighConsumerLag
+        expr: |
+          consumer_lag > 10000
+        for: 10m
+        labels:
+          severity: high
+          category: messaging
+        annotations:
+          summary: "High consumer lag on {{ $labels.topic }}"
+          description: "Consumer lag is {{ $value }} messages (threshold: 10000)"
+          runbook_url: "https://wiki.qbem.net.br/runbooks/consumer-lag"
+
+  # Recording Rules (Pré-calcular métricas pesadas)
+  - name: recording_rules
+    interval: 30s
+    rules:
+      # Taxa de requisições por serviço
+      - record: job:http_requests:rate5m
+        expr: sum(rate(http_requests_total[5m])) by (job, service)
+
+      # Taxa de erro por serviço
+      - record: job:http_requests_error_rate:rate5m
+        expr: |
+          sum(rate(http_requests_total{status_code=~"5.."}[5m])) by (job, service)
+          /
+          sum(rate(http_requests_total[5m])) by (job, service)
+
+      # Latência p95 por serviço
+      - record: job:http_request_duration_seconds:p95
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (job, service, le)
+          )
+
+      # Latência p99 por serviço
+      - record: job:http_request_duration_seconds:p99
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (job, service, le)
+          )

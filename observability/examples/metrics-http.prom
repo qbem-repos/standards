@@ -1,0 +1,87 @@
+# HELP http_requests_total Total HTTP requests
+# TYPE http_requests_total counter
+http_requests_total{service="order-service",environment="production",method="GET",path="/v1/orders",status_code="200"} 15234
+http_requests_total{service="order-service",environment="production",method="GET",path="/v1/orders/:id",status_code="200"} 8921
+http_requests_total{service="order-service",environment="production",method="POST",path="/v1/orders",status_code="201"} 3456
+http_requests_total{service="order-service",environment="production",method="POST",path="/v1/orders",status_code="400"} 123
+http_requests_total{service="order-service",environment="production",method="POST",path="/v1/orders",status_code="500"} 45
+http_requests_total{service="order-service",environment="production",method="DELETE",path="/v1/orders/:id",status_code="204"} 234
+
+# HELP http_request_duration_seconds HTTP request duration in seconds
+# TYPE http_request_duration_seconds histogram
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.005"} 2341
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.01"} 5678
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.025"} 9012
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.05"} 12345
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.1"} 14123
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.25"} 15012
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="0.5"} 15189
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="1"} 15223
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="2.5"} 15232
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="5"} 15234
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="10"} 15234
+http_request_duration_seconds_bucket{service="order-service",environment="production",method="GET",path="/v1/orders",le="+Inf"} 15234
+http_request_duration_seconds_sum{service="order-service",environment="production",method="GET",path="/v1/orders"} 892.5
+http_request_duration_seconds_count{service="order-service",environment="production",method="GET",path="/v1/orders"} 15234
+
+# HELP http_requests_in_progress HTTP requests currently being processed
+# TYPE http_requests_in_progress gauge
+http_requests_in_progress{service="order-service",environment="production",method="GET",path="/v1/orders"} 5
+http_requests_in_progress{service="order-service",environment="production",method="POST",path="/v1/orders"} 2
+
+# HELP orders_created_total Total orders created
+# TYPE orders_created_total counter
+orders_created_total{service="order-service",environment="production",payment_method="credit_card",status="success"} 2890
+orders_created_total{service="order-service",environment="production",payment_method="pix",status="success"} 1234
+orders_created_total{service="order-service",environment="production",payment_method="boleto",status="success"} 567
+orders_created_total{service="order-service",environment="production",payment_method="credit_card",status="failed"} 45
+orders_created_total{service="order-service",environment="production",payment_method="pix",status="failed"} 12
+
+# HELP payment_amount_total Total payment amount in cents
+# TYPE payment_amount_total counter
+payment_amount_total{service="order-service",environment="production",currency="BRL"} 125678900
+payment_amount_total{service="order-service",environment="production",currency="USD"} 34567800
+
+# HELP db_query_duration_seconds Database query duration in seconds
+# TYPE db_query_duration_seconds histogram
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.001"} 8912
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.005"} 12345
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.01"} 14567
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.025"} 15234
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.05"} 15456
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.1"} 15567
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.25"} 15589
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="0.5"} 15598
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="1"} 15600
+db_query_duration_seconds_bucket{service="order-service",environment="production",database="postgres",operation="SELECT",le="+Inf"} 15600
+db_query_duration_seconds_sum{service="order-service",environment="production",database="postgres",operation="SELECT"} 156.78
+db_query_duration_seconds_count{service="order-service",environment="production",database="postgres",operation="SELECT"} 15600
+
+# HELP db_connections_active Number of active database connections
+# TYPE db_connections_active gauge
+db_connections_active{service="order-service",environment="production",database="postgres"} 12
+
+# HELP cache_hits_total Total cache hits
+# TYPE cache_hits_total counter
+cache_hits_total{service="order-service",environment="production",cache_name="redis"} 45678
+
+# HELP cache_misses_total Total cache misses
+# TYPE cache_misses_total counter
+cache_misses_total{service="order-service",environment="production",cache_name="redis"} 12345
+
+# HELP job_processing_duration_seconds Job processing duration in seconds
+# TYPE job_processing_duration_seconds histogram
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="0.1"} 123
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="0.5"} 456
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="1"} 789
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="5"} 980
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="10"} 995
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="30"} 999
+job_processing_duration_seconds_bucket{service="worker-service",environment="production",job_type="send-email",le="+Inf"} 1000
+job_processing_duration_seconds_sum{service="worker-service",environment="production",job_type="send-email"} 2345.67
+job_processing_duration_seconds_count{service="worker-service",environment="production",job_type="send-email"} 1000
+
+# HELP job_processed_total Total jobs processed
+# TYPE job_processed_total counter
+job_processed_total{service="worker-service",environment="production",job_type="send-email",status="success"} 980
+job_processed_total{service="worker-service",environment="production",job_type="send-email",status="failed"} 20

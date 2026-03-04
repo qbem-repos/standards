@@ -1,0 +1,419 @@
+{
+  "dashboard": {
+    "title": "Service RED Metrics",
+    "uid": "service-red-metrics",
+    "timezone": "utc",
+    "editable": true,
+    "hideControls": false,
+    "sharedCrosshair": false,
+    "tags": ["observability", "red", "slo"],
+    "refresh": "30s",
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "service",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(http_requests_total, service)",
+          "multi": false,
+          "includeAll": false,
+          "refresh": 1
+        },
+        {
+          "name": "environment",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(http_requests_total{service=\"$service\"}, environment)",
+          "multi": false,
+          "includeAll": false,
+          "refresh": 1
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate (RPS)",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\"}[5m]))",
+            "legendFormat": "Total RPS",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\"}[5m])) by (method)",
+            "legendFormat": "{{ method }}",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "requests/sec",
+            "format": "short"
+          }
+        ],
+        "legend": {
+          "show": true,
+          "values": true,
+          "current": true,
+          "avg": true
+        },
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Error Rate (%)",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "(sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\",status_code=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\"}[5m]))) * 100",
+            "legendFormat": "Error Rate",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "error %",
+            "format": "percent",
+            "max": 10
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [5],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": ["A", "5m", "now"]
+              },
+              "reducer": {
+                "params": [],
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "High Error Rate alert",
+          "noDataState": "no_data",
+          "notifications": []
+        },
+        "thresholds": [
+          {
+            "value": 1,
+            "colorMode": "custom",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "fillColor": "rgba(255, 152, 0, 0.2)",
+            "lineColor": "rgb(255, 152, 0)"
+          },
+          {
+            "value": 5,
+            "colorMode": "custom",
+            "fill": true,
+            "line": true,
+            "op": "gt",
+            "fillColor": "rgba(244, 67, 54, 0.3)",
+            "lineColor": "rgb(244, 67, 54)"
+          }
+        ],
+        "legend": {
+          "show": true,
+          "values": true,
+          "current": true,
+          "max": true
+        }
+      },
+      {
+        "id": 3,
+        "title": "Latency Percentiles",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 24,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{service=\"$service\",environment=\"$environment\"}[5m])) by (le)) * 1000",
+            "legendFormat": "p50",
+            "refId": "A"
+          },
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"$service\",environment=\"$environment\"}[5m])) by (le)) * 1000",
+            "legendFormat": "p95",
+            "refId": "B"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=\"$service\",environment=\"$environment\"}[5m])) by (le)) * 1000",
+            "legendFormat": "p99",
+            "refId": "C"
+          }
+        ],
+        "yaxes": [
+          {
+            "label": "latency",
+            "format": "ms"
+          }
+        ],
+        "thresholds": [
+          {
+            "value": 500,
+            "colorMode": "custom",
+            "fill": false,
+            "line": true,
+            "op": "gt",
+            "lineColor": "rgba(255, 152, 0, 0.8)"
+          },
+          {
+            "value": 1000,
+            "colorMode": "custom",
+            "fill": false,
+            "line": true,
+            "op": "gt",
+            "lineColor": "rgba(244, 67, 54, 0.8)"
+          }
+        ],
+        "legend": {
+          "show": true,
+          "values": true,
+          "current": true,
+          "max": true,
+          "avg": true
+        }
+      },
+      {
+        "id": 4,
+        "title": "Top Slow Endpoints (p95)",
+        "type": "table",
+        "gridPos": {
+          "x": 0,
+          "y": 16,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "topk(10, histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"$service\",environment=\"$environment\"}[5m])) by (path, le))) * 1000",
+            "instant": true,
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "le": true
+              },
+              "indexByName": {},
+              "renameByName": {
+                "path": "Endpoint",
+                "Value": "Latency (ms)"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Requests by Status Code",
+        "type": "piechart",
+        "gridPos": {
+          "x": 12,
+          "y": 16,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\"}[5m])) by (status_code)",
+            "legendFormat": "{{ status_code }}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "legend": {
+            "displayMode": "table",
+            "placement": "right",
+            "values": ["value", "percent"]
+          },
+          "pieType": "donut"
+        }
+      },
+      {
+        "id": 6,
+        "title": "SLO Compliance (99.9% Availability)",
+        "type": "gauge",
+        "gridPos": {
+          "x": 0,
+          "y": 24,
+          "w": 8,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "(sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\",status_code=~\"2..|3..\"}[30d])) / sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\"}[30d]))) * 100",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 99,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 99,
+                  "color": "red"
+                },
+                {
+                  "value": 99.5,
+                  "color": "orange"
+                },
+                {
+                  "value": 99.9,
+                  "color": "green"
+                }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "Error Budget Remaining (30d)",
+        "type": "stat",
+        "gridPos": {
+          "x": 8,
+          "y": 24,
+          "w": 8,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "((sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\",status_code=~\"2..|3..\"}[30d])) / sum(rate(http_requests_total{service=\"$service\",environment=\"$environment\"}[30d]))) - 0.999) / (1 - 0.999) * 100",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "value": 0,
+                  "color": "red"
+                },
+                {
+                  "value": 25,
+                  "color": "orange"
+                },
+                {
+                  "value": 50,
+                  "color": "green"
+                }
+              ]
+            }
+          }
+        },
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": ["lastNotNull"],
+            "fields": "",
+            "values": false
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Requests In Progress",
+        "type": "stat",
+        "gridPos": {
+          "x": 16,
+          "y": 24,
+          "w": 8,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "sum(http_requests_in_progress{service=\"$service\",environment=\"$environment\"})",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          }
+        },
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto"
+        }
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "changes(process_start_time_seconds{service=\"$service\"}[5m]) > 0",
+          "iconColor": "blue",
+          "name": "Restarts",
+          "tagKeys": "service",
+          "textFormat": "Service Restart",
+          "titleFormat": "Restart"
+        }
+      ]
+    }
+  }
+}

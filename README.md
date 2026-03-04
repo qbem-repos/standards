@@ -88,12 +88,16 @@ Padrões de logs, métricas e tracing.
 
 Práticas de segurança para toda a stack.
 
-- ![key](https://api.iconify.design/lucide:key.svg?width=16) Gestão de segredos
+- ![key](https://api.iconify.design/lucide:key.svg?width=16) [Gestão de Segredos](security/secrets-management.md) — Vault, rotação, detecção de vazamento
+- ![shield-check](https://api.iconify.design/lucide:shield-check.svg?width=16) [Autenticação & Autorização](security/auth.md) — OAuth 2.0, JWT, RBAC, mTLS
+- ![globe](https://api.iconify.design/lucide:globe.svg?width=16) [Segurança de APIs](security/api-security.md) — Rate limiting, validação, OWASP API Top 10
+- ![database](https://api.iconify.design/lucide:database.svg?width=16) [Proteção de Dados](security/data-protection.md) — Criptografia, LGPD, direitos dos titulares
 - ![package-check](https://api.iconify.design/lucide:package-check.svg?width=16) Auditoria de dependências
 - ![search](https://api.iconify.design/lucide:search.svg?width=16) Threat modeling
+- ![bug](https://api.iconify.design/lucide:bug.svg?width=16) Testes de segurança
 - ![file-check](https://api.iconify.design/lucide:file-check.svg?width=16) Compliance e LGPD
 
-**Status:** 🚧 Em desenvolvimento
+**Status:** ✅ Completo (base) · 🚧 Expansão contínua
 
 ---
 

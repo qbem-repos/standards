@@ -145,11 +145,16 @@ Stack de ferramentas para observabilidade.
 
 Exemplos práticos de instrumentação.
 
-**Arquivos disponíveis:**
-- ![file-code](https://api.iconify.design/lucide:file-code.svg?width=14) `log-format.json` — Formato padrão de log
+**Estrutura:**
+- ![folder](https://api.iconify.design/lucide:folder.svg?width=14) `python/` — Exemplos Python (structlog, prometheus-client, OpenTelemetry)
+- ![folder](https://api.iconify.design/lucide:folder.svg?width=14) `dotnet/` — Exemplos C# (.NET Core) (Serilog, prometheus-net, OpenTelemetry)
+- ![folder](https://api.iconify.design/lucide:folder.svg?width=14) `prometheus/` — Regras de alerta e recording rules
+- ![folder](https://api.iconify.design/lucide:folder.svg?width=14) `grafana/` — Dashboards (RED, USE, SLO)
+
+**Arquivos de referência:**
+- ![file-code](https://api.iconify.design/lucide:file-code.svg?width=14) `log-format.json` — Formato padrão de log estruturado
+- ![file-code](https://api.iconify.design/lucide:file-code.svg?width=14) `trace-span.json` — Formato padrão de span OpenTelemetry
 - ![file-code](https://api.iconify.design/lucide:file-code.svg?width=14) `metrics-http.prom` — Métricas HTTP em formato Prometheus
-- ![file-code](https://api.iconify.design/lucide:file-code.svg?width=14) `trace-span.json` — Exemplo de span OpenTelemetry
-- ![file-code](https://api.iconify.design/lucide:file-code.svg?width=14) `dashboard-red.json` — Dashboard Grafana (metodologia RED)
 
 **[📁 Ver todos os exemplos →](examples/)**
 

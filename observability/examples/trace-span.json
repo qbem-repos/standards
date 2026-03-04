@@ -1,0 +1,65 @@
+{
+  "trace_id": "0af7651916cd43dd8448eb211c80319c",
+  "span_id": "b7ad6b7169203331",
+  "parent_span_id": "00f067aa0ba902b7",
+  "name": "POST /v1/orders",
+  "kind": "SERVER",
+  "start_time": "2025-01-10T14:30:00.000Z",
+  "end_time": "2025-01-10T14:30:00.245Z",
+  "duration_ms": 245,
+  "status": {
+    "code": "OK",
+    "message": ""
+  },
+  "attributes": {
+    "service.name": "order-service",
+    "service.version": "1.2.3",
+    "deployment.environment": "production",
+    "http.method": "POST",
+    "http.url": "https://api.qbem.net.br/v1/orders",
+    "http.target": "/v1/orders",
+    "http.host": "api.qbem.net.br",
+    "http.scheme": "https",
+    "http.status_code": 201,
+    "http.user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "http.request_content_length": 1024,
+    "http.response_content_length": 256,
+    "http.client_ip": "192.168.1.1",
+    "user.id": "u_789",
+    "order.id": "ord_999",
+    "order.amount": 12990,
+    "order.currency": "BRL",
+    "payment.method": "credit_card",
+    "tenant.id": "tn_1"
+  },
+  "events": [
+    {
+      "timestamp": "2025-01-10T14:30:00.050Z",
+      "name": "order_validated",
+      "attributes": {
+        "validation.status": "success",
+        "validation.duration_ms": 45
+      }
+    },
+    {
+      "timestamp": "2025-01-10T14:30:00.180Z",
+      "name": "payment_processed",
+      "attributes": {
+        "payment.id": "pay_abc123",
+        "payment.status": "success",
+        "payment.gateway": "stripe"
+      }
+    }
+  ],
+  "links": [],
+  "resource": {
+    "service.name": "order-service",
+    "service.namespace": "qbem",
+    "service.version": "1.2.3",
+    "deployment.environment": "production",
+    "host.name": "order-service-pod-abc123",
+    "k8s.namespace.name": "production",
+    "k8s.pod.name": "order-service-7d5c9b8f-xyz12",
+    "k8s.deployment.name": "order-service"
+  }
+}

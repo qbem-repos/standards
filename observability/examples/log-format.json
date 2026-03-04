@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-01-10T14:30:00.123Z",
+  "level": "INFO",
+  "message": "Order created successfully",
+  "service": "order-service",
+  "environment": "production",
+  "version": "1.2.3",
+  "trace_id": "0af7651916cd43dd8448eb211c80319c",
+  "span_id": "b7ad6b7169203331",
+  "request_id": "req_abc123def456",
+  "context": {
+    "http": {
+      "method": "POST",
+      "path": "/v1/orders",
+      "status_code": 201,
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "duration_ms": 123.45
+    },
+    "user_id": "u_789",
+    "order_id": "ord_999",
+    "tenant_id": "tn_1",
+    "payment_method": "credit_card",
+    "amount": 12990
+  }
+}
