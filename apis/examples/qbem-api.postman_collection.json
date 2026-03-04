@@ -18,9 +18,9 @@
           }
         ],
         "url": {
-          "raw": "https://api.qbem.dev/v1/users?cursor=&limit=10",
+          "raw": "https://api.qbem.net.br/v1/users?cursor=&limit=10",
           "protocol": "https",
-          "host": ["api", "qbem", "dev"],
+          "host": ["api", "qbem", "net", "br"],
           "path": ["v1", "users"],
           "query": [
             { "key": "cursor", "value": "" },
@@ -56,9 +56,9 @@
           "raw": "{\n  \"email\": \"joao@example.com\",\n  \"name\": \"João\"\n}"
         },
         "url": {
-          "raw": "https://api.qbem.dev/v1/users",
+          "raw": "https://api.qbem.net.br/v1/users",
           "protocol": "https",
-          "host": ["api", "qbem", "dev"],
+          "host": ["api", "qbem", "net", "br"],
           "path": ["v1", "users"]
         }
       },
@@ -76,9 +76,9 @@
           }
         ],
         "url": {
-          "raw": "https://api.qbem.dev/v1/users/{{user_id}}",
+          "raw": "https://api.qbem.net.br/v1/users/{{user_id}}",
           "protocol": "https",
-          "host": ["api", "qbem", "dev"],
+          "host": ["api", "qbem", "net", "br"],
           "path": ["v1", "users", "{{user_id}}"]
         }
       },
@@ -96,9 +96,9 @@
           }
         ],
         "url": {
-          "raw": "https://api.qbem.dev/v1/users/nao-existe",
+          "raw": "https://api.qbem.net.br/v1/users/nao-existe",
           "protocol": "https",
-          "host": ["api", "qbem", "dev"],
+          "host": ["api", "qbem", "net", "br"],
           "path": ["v1", "users", "nao-existe"]
         }
       },
@@ -112,7 +112,7 @@
           "header": [
             { "key": "Content-Type", "value": "application/problem+json" }
           ],
-          "body": "{\n  \"type\": \"https://docs.qbem.dev/errors/not-found\",\n  \"title\": \"Recurso não encontrado\",\n  \"status\": 404,\n  \"detail\": \"User 'nao-existe' não foi localizado\",\n  \"trace_id\": \"ab12cd34\"\n}"
+          "body": "{\n  \"type\": \"https://docs.qbem.net.br/errors/not-found\",\n  \"title\": \"Recurso não encontrado\",\n  \"status\": 404,\n  \"detail\": \"User 'nao-existe' não foi localizado\",\n  \"trace_id\": \"ab12cd34\"\n}"
         }
       ]
     }

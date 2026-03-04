@@ -1,5 +1,5 @@
 {
-  "type": "https://docs.qbem.dev/errors/validation",
+  "type": "https://docs.qbem.net.br/errors/validation",
   "title": "Erro de validação",
   "status": 422,
   "detail": "Campos inválidos",

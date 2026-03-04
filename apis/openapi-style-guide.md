@@ -20,7 +20,7 @@ info:
   version: "1.0.0"
   description: API para gestão de pedidos
 servers:
-  - url: https://api.sua-org.dev/v1
+  - url: https://api.qbem.net.br/v1
 
 ````
 
@@ -191,6 +191,6 @@ components:
 
 ## Lint & CI
 
-***Spectral** com `tooling/spectral/ruleset.yaml` obrigatório.
+***Spectral** com `tooling/spectral/ruleset.yml` obrigatório.
 ***oasdiff** no CI para detectar breaking changes.
 *Bloquear merge se contrato estiver desatualizado.

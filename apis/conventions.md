@@ -70,7 +70,7 @@ Exemplo:
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/not-found",
+  "type": "https://docs.qbem.net.br/errors/not-found",
   "title": "Recurso não encontrado",
   "status": 404,
   "detail": "User 123 não existe",
@@ -168,5 +168,5 @@ Valores monetários:
 * Exemplo:
 
 ```HTTP
-GET https://api.qbem.dev/v1/openapi.json
+GET https://api.qbem.net.br/v1/openapi.json
 ```

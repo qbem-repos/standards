@@ -224,8 +224,4 @@ channel.basic_publish(
 * [ ] `exchange`/`routing_key` consistentes com `event_type`
 * [ ] `message_id` usado para idempotência (ou header dedicado)
 
----
 
-Se quiser, eu preparo também o **`schema-evolution.md`** agora
-(regras de evolução compatível, matriz de compat forward/backward e
-como versionar `-v2`).

@@ -13,7 +13,7 @@ Todos os serviços devem retornar erros no formato **RFC 7807** com JSON e inclu
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/not-found",
+  "type": "https://docs.qbem.net.br/errors/not-found",
   "title": "Recurso não encontrado",
   "status": 404,
   "detail": "User 'u_123' não existe",
@@ -36,13 +36,13 @@ Todos os serviços devem retornar erros no formato **RFC 7807** com JSON e inclu
 
 ## Padrões de `type`
 
-* Namespace: `https://docs.qbem.dev/errors/<slug>`
+* Namespace: `https://docs.qbem.net.br/errors/<slug>`
 * Use *kebab-case*: `validation`, `conflict`, `rate-limit`, `unauthorized`, `forbidden`,
 `not-found`, `internal`.
 
 Ex.:
-`https://docs.qbem.dev/errors/validation`
-`https://docs.qbem.dev/errors/rate-limit`
+`https://docs.qbem.net.br/errors/validation`
+`https://docs.qbem.net.br/errors/rate-limit`
 
 ---
 
@@ -52,7 +52,7 @@ Quando houver vários problemas de campo, use `errors`.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/validation",
+  "type": "https://docs.qbem.net.br/errors/validation",
   "title": "Erro de validação",
   "status": 422,
   "detail": "Requisição possui campos inválidos",
@@ -78,7 +78,7 @@ Quando houver vários problemas de campo, use `errors`.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/unauthorized",
+  "type": "https://docs.qbem.net.br/errors/unauthorized",
   "title": "Não autenticado",
   "status": 401,
   "detail": "Token ausente ou inválido",
@@ -90,7 +90,7 @@ Quando houver vários problemas de campo, use `errors`.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/forbidden",
+  "type": "https://docs.qbem.net.br/errors/forbidden",
   "title": "Acesso negado",
   "status": 403,
   "detail": "Escopo insuficiente: 'orders:write' é necessário",
@@ -104,7 +104,7 @@ Quando houver vários problemas de campo, use `errors`.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/conflict",
+  "type": "https://docs.qbem.net.br/errors/conflict",
   "title": "Conflito",
   "status": 409,
   "detail": "Recurso já existe para esta Idempotency-Key",
@@ -129,7 +129,7 @@ Payload:
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/rate-limit",
+  "type": "https://docs.qbem.net.br/errors/rate-limit",
   "title": "Limite de requisições excedido",
   "status": 429,
   "detail": "Tente novamente após 30 segundos",
@@ -143,7 +143,7 @@ Payload:
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/not-found",
+  "type": "https://docs.qbem.net.br/errors/not-found",
   "title": "Recurso não encontrado",
   "status": 404,
   "detail": "Order 'ord_123' não foi localizada",
@@ -160,7 +160,7 @@ Use com `If-Match` / `ETag` para controle otimista.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/precondition-failed",
+  "type": "https://docs.qbem.net.br/errors/precondition-failed",
   "title": "Pré-condição falhou",
   "status": 412,
   "detail": "ETag não corresponde. Recarregue o recurso e tente novamente.",
@@ -174,7 +174,7 @@ Use com `If-Match` / `ETag` para controle otimista.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/internal",
+  "type": "https://docs.qbem.net.br/errors/internal",
   "title": "Erro interno",
   "status": 500,
   "detail": "Ocorreu um erro inesperado. Tente novamente.",
@@ -202,7 +202,7 @@ Use com `If-Match` / `ETag` para controle otimista.
 |  500 | `/internal`               |
 |  503 | `/unavailable`            |
 
-*(Prefixo comum omitido: `https://docs.qbem.dev/errors`)*
+*(Prefixo comum omitido: `https://docs.qbem.net.br/errors`)*
 
 ---
 
@@ -226,7 +226,7 @@ Use com `If-Match` / `ETag` para controle otimista.
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/webhook-delivery",
+  "type": "https://docs.qbem.net.br/errors/webhook-delivery",
   "title": "Falha ao entregar webhook",
   "status": 502,
   "detail": "Timeout ao chamar o endpoint do cliente",
@@ -247,14 +247,14 @@ Campos extras específicos do domínio podem ser incluídos sob `extensions`:
 
 ```json
 {
-  "type": "https://docs.qbem.dev/errors/validation",
+  "type": "https://docs.qbem.net.br/errors/validation",
   "title": "Erro de validação",
   "status": 422,
   "detail": "Campos inválidos",
   "trace_id": "t1",
   "extensions": {
     "policy": "KYC_MINIMUM_AGE",
-    "docs": "https://docs.qbem.dev/policies/kyc"
+    "docs": "https://docs.qbem.net.br/policies/kyc"
   }
 }
 ```

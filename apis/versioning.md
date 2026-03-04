@@ -75,7 +75,7 @@ properties:
 ```plain
 Deprecation: version="v1"; date="2025-12-01"
 Sunset: Wed, 01 Jun 2026 00:00:00 GMT
-Link: <https://docs.sua-org.dev/migration/v2>; rel="deprecation"
+Link: <https://docs.qbem.net.br/migration/v2>; rel="deprecation"
 ```
 
 ---
@@ -109,7 +109,7 @@ info:
   title: Orders API
   version: "1.2.0"   # minor compatível
 servers:
-  - url: https://api.sua-org.dev/v1
+  - url: https://api.qbem.net.br/v1
 paths:
   /orders:
     get:
