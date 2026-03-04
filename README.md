@@ -217,6 +217,30 @@ Veja [GOVERNANCE.md](GOVERNANCE.md) para detalhes do processo.
 
 ---
 
+## 📖 Documentação Online
+
+A documentação completa está disponível online via GitHub Pages:
+
+🌐 **https://qbem-repos.github.io/standards/**
+
+### ![computer](https://api.iconify.design/lucide:computer.svg?width=18) Desenvolvimento Local
+
+Para visualizar e editar a documentação localmente:
+
+```bash
+# Instalar dependências
+pip install -r requirements.txt
+
+# Iniciar servidor local
+mkdocs serve
+
+# Acessar http://localhost:8000
+```
+
+Veja [DEVELOPMENT.md](DEVELOPMENT.md) para instruções completas.
+
+---
+
 ## 🤝 Contribuindo
 
 Contribuições são bem-vindas! Este repositório é colaborativo.
