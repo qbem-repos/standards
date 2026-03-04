@@ -228,14 +228,16 @@ A documentação completa está disponível online via GitHub Pages:
 Para visualizar e editar a documentação localmente:
 
 ```bash
-# Instalar dependências
-pip install -r requirements.txt
+# Instalar dependências (opcional - apenas para dev local)
+bundle install
 
 # Iniciar servidor local
-mkdocs serve
+bundle exec jekyll serve --livereload
 
-# Acessar http://localhost:8000
+# Acessar http://localhost:4000/standards/
 ```
+
+> **Nota**: O GitHub Pages usa Jekyll nativamente. Nenhuma dependência extra é necessária para deploy - apenas faça push para `main`.
 
 Veja [DEVELOPMENT.md](DEVELOPMENT.md) para instruções completas.
 
