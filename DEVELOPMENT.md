@@ -1,129 +1,42 @@
 # Guia de Desenvolvimento
 
-> Instruções para contribuir e desenvolver a documentação localmente
+> Documentação mínima para contribuir com os padrões QBEM
 
 ---
 
-## 🚀 Setup Local
+## 🚀 GitHub Pages (Deploy Automático)
 
-### Pré-requisitos
+A documentação é publicada automaticamente via GitHub Pages usando Jekyll nativo.
 
-- **Python 3.11+**
-- **Git**
+**Não é necessário instalar nada para contribuir!**
 
-### Instalação
+Apenas edite os arquivos `.md` e faça push para `main`.
+
+### URL da Documentação
+
+```
+https://qbem-repos.github.io/standards/
+```
+
+---
+
+## 📝 Contribuindo
+
+### 1. Editar Documentação
 
 ```bash
 # Clone o repositório
 git clone https://github.com/qbem-repos/standards.git
 cd standards
 
-# Instale as dependências
-pip install -r requirements.txt
-```
-
----
-
-## 📖 Executando a Documentação Localmente
-
-### Servidor de Desenvolvimento
-
-```bash
-# Inicia o servidor local com hot-reload
-mkdocs serve
-```
-
-A documentação estará disponível em: **http://localhost:8000**
-
-### Build da Documentação
-
-```bash
-# Gera os arquivos estáticos em /site
-mkdocs build
-
-# Build com validação rigorosa
-mkdocs build --strict
-```
-
----
-
-## 📝 Estrutura do Projeto
-
-```plaintext
-standards/
-├── .github/
-│   ├── workflows/
-│   │   └── deploy-docs.yml    # CI/CD para GitHub Pages
-│   └── docs/
-│       └── extra.css          # Estilos customizados
-├── apis/                      # Documentação de APIs HTTP
-│   ├── README.md
-│   ├── conventions.md
-│   ├── error-model.md
-│   ├── openapi-style-guide.md
-│   └── versioning.md
-├── async/                     # Mensageria Assíncrona
-│   ├── README.md
-│   ├── conventions.md
-│   ├── headers.md
-│   ├── reliability.md
-│   ├── schema-evolution.md
-│   └── security.md
-├── security/                  # Segurança
-│   ├── README.md
-│   ├── secrets-management.md
-│   ├── auth.md
-│   ├── api-security.md
-│   └── data-protection.md
-├── webhooks/                  # Webhooks (em desenvolvimento)
-├── observability/             # Observabilidade (em desenvolvimento)
-├── tooling/                   # Ferramentas
-├── checklists/                # Checklists
-├── frontend/                  # Frontend (em desenvolvimento)
-├── adr/                       # Architecture Decision Records
-├── mkdocs.yml                 # Configuração do MkDocs
-├── requirements.txt           # Dependências Python
-└── README.md                  # Página inicial
-```
-
----
-
-## ✍️ Contribuindo com Documentação
-
-### 1. Criar um Branch
-
-```bash
+# Crie um branch
 git checkout -b docs/minha-contribuicao
+
+# Edite os arquivos .md com seu editor favorito
+# Todos os arquivos Markdown são processados automaticamente
 ```
 
-### 2. Editar Arquivos Markdown
-
-- Os arquivos Markdown estão diretamente na raiz e subpastas do projeto
-- Use a sintaxe Markdown padrão
-- Adicione emojis via `:emoji_name:` ou diretamente
-- Use ícones do Iconify quando apropriado
-
-### 3. Testar Localmente
-
-```bash
-# Inicie o servidor
-mkdocs serve
-
-# Abra http://localhost:8000 e verifique suas alterações
-```
-
-### 4. Validar
-
-```bash
-# Build com validação
-mkdocs build --strict
-
-# Verificar links quebrados (opcional)
-# pip install mkdocs-linkcheck
-# mkdocs build --strict --site-dir test_site
-```
-
-### 5. Commit e Push
+### 2. Commit e Push
 
 ```bash
 git add .
@@ -131,204 +44,177 @@ git commit -m "docs: adiciona documentação sobre X"
 git push origin docs/minha-contribuicao
 ```
 
-### 6. Abrir Pull Request
+### 3. Abrir Pull Request
 
 - Abra um PR no GitHub
-- Descreva suas mudanças
 - Aguarde revisão
+- Após merge, o deploy é automático em ~1-2 minutos
 
 ---
 
-## 🎨 Guia de Estilo
+## 💻 Desenvolvimento Local (Opcional)
 
-### Títulos
+Se quiser visualizar localmente antes do push:
 
-```markdown
-# Título Principal (H1) - Apenas um por página
+### Instalar Jekyll
 
-## Seção (H2)
-
-### Subseção (H3)
-
-#### Detalhes (H4)
+**macOS:**
+```bash
+brew install ruby
+gem install bundler jekyll
 ```
 
-### Blocos de Código
+**Windows:**
+- Baixe [RubyInstaller](https://rubyinstaller.org/)
+- Execute: `gem install bundler jekyll`
 
-````markdown
-```javascript
-// Use a linguagem apropriada para syntax highlighting
-const example = "code";
+**Linux:**
+```bash
+sudo apt-get install ruby-full build-essential
+gem install bundler jekyll
 ```
+
+### Rodar Localmente
 
 ```bash
-# Para comandos shell
-npm install
+# No diretório do projeto
+bundle install
+bundle exec jekyll serve
+
+# Acesse: http://localhost:4000/standards/
 ```
 
-```json
-{
-  "formato": "json"
-}
+---
+
+## 📖 Guia de Markdown
+
+### Títulos
+```markdown
+# H1 - Título Principal
+## H2 - Seção
+### H3 - Subseção
+```
+
+### Código
+````markdown
+```javascript
+const exemplo = "código";
 ```
 ````
 
-### Admonitions (Blocos de Destaque)
-
+### Links
 ```markdown
-!!! note "Nota"
-    Informação importante
-
-!!! warning "Atenção"
-    Cuidado com isso
-
-!!! danger "Perigo"
-    Não faça isso!
-
-!!! tip "Dica"
-    Sugestão útil
-
-!!! example "Exemplo"
-    Veja como fazer
+[Texto do Link](./caminho/arquivo.md)
+[Link Externo](https://example.com)
 ```
 
 ### Listas
-
 ```markdown
-- Item não ordenado
-- Outro item
+- Item 1
+- Item 2
   - Subitem
 
-1. Item ordenado
-2. Segundo item
-3. Terceiro item
+1. Primeiro
+2. Segundo
 ```
 
 ### Tabelas
-
 ```markdown
-| Coluna 1 | Coluna 2 | Coluna 3 |
-|----------|----------|----------|
-| Valor 1  | Valor 2  | Valor 3  |
-| Valor 4  | Valor 5  | Valor 6  |
-```
-
-### Links
-
-```markdown
-[Texto do link](url-relativa.md)
-[Link externo](https://exemplo.com)
-[Link com título](url.md "Título ao passar o mouse")
+| Coluna 1 | Coluna 2 |
+|----------|----------|
+| Valor A  | Valor B  |
 ```
 
 ### Checklists
-
 ```markdown
-- [ ] Tarefa não concluída
-- [x] Tarefa concluída
+- [ ] Tarefa pendente
+- [x] Tarefa completa
 ```
 
-### Ícones (via Iconify)
-
+### Blockquotes
 ```markdown
-![shield](https://api.iconify.design/lucide:shield.svg?width=16)
-![check](https://api.iconify.design/lucide:check.svg?color=%2351cf66&width=16)
+> Citação ou nota importante
 ```
 
 ---
 
-## 🔧 Configuração Avançada
+## 📁 Estrutura
 
-### Adicionar Nova Página
+```
+standards/
+├── _config.yml          # Config Jekyll (não mexer geralmente)
+├── assets/css/          # Estilos customizados
+├── apis/                # Docs de APIs
+├── async/               # Docs de mensageria
+├── security/            # Docs de segurança
+└── *.md                 # Todos os Markdown são processados
+```
 
-1. Crie o arquivo `.md` na pasta apropriada
-2. Adicione ao `nav` em `mkdocs.yml`:
+---
+
+## 🔧 Configuração
+
+### _config.yml
+
+Configuração minimalista do Jekyll:
 
 ```yaml
-nav:
-  - Nova Seção:
-      - nova-secao/README.md
-      - Documento: nova-secao/documento.md
+title: QBEM Standards
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-relative-links
+  - jekyll-optional-front-matter
 ```
 
 ### Customizar CSS
 
-Edite `.github/docs/extra.css` para adicionar estilos customizados.
-
-### Adicionar Plugins
-
-1. Adicione ao `requirements.txt`
-2. Configure em `mkdocs.yml` na seção `plugins:`
+Edite `assets/css/style.scss` para ajustar estilos.
 
 ---
 
-## 🚀 Deploy
+## ✅ Checklist para PRs
 
-### GitHub Pages (Automático)
-
-O deploy é automático via GitHub Actions quando há push para `main`:
-
-1. Workflow: `.github/workflows/deploy-docs.yml`
-2. Trigger: Push ou PR para `main`
-3. Build com MkDocs
-4. Deploy para GitHub Pages
-
-### Deploy Manual
-
-```bash
-# Build e deploy (requer permissões)
-mkdocs gh-deploy --force
-```
+- [ ] Arquivos `.md` editados
+- [ ] Links relativos funcionando
+- [ ] Sem erros de sintaxe Markdown
+- [ ] Commit seguindo [Conventional Commits](https://conventionalcommits.org)
+- [ ] Descrição clara no PR
 
 ---
 
-## 🐛 Troubleshooting
+## 🐛 Problemas Comuns
 
-### Erro: "Module not found"
+### Links quebrados
 
-```bash
-pip install --upgrade -r requirements.txt
+Use links relativos:
+```markdown
+✅ [Correto](./apis/conventions.md)
+❌ [Errado](/apis/conventions.md)
 ```
 
-### Erro: "Config file not found"
+### Imagens não aparecem
 
-Certifique-se de estar no diretório raiz do projeto onde está o `mkdocs.yml`.
-
-### Links Quebrados
-
-```bash
-# Instale o plugin
-pip install mkdocs-linkcheck
-
-# Execute verificação
-mkdocs build --strict
-```
-
-### Hot-reload não está funcionando
-
-```bash
-# Pare o servidor (Ctrl+C) e reinicie
-mkdocs serve --clean
+Coloque imagens em `assets/` e referencie:
+```markdown
+![Alt](./assets/imagem.png)
 ```
 
 ---
 
 ## 📚 Recursos
 
-- [MkDocs Documentation](https://www.mkdocs.org/)
-- [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/)
 - [Markdown Guide](https://www.markdownguide.org/)
-- [PyMdown Extensions](https://facelessuser.github.io/pymdown-extensions/)
-- [Iconify](https://iconify.design/)
+- [Jekyll Docs](https://jekyllrb.com/docs/)
+- [GitHub Pages](https://docs.github.com/en/pages)
 
 ---
 
 ## 📞 Suporte
 
-- **Issues**: [GitHub Issues](https://github.com/qbem-repos/standards/issues)
-- **Discussões**: [GitHub Discussions](https://github.com/qbem-repos/standards/discussions)
-- **Email**: Entre em contato com o time de arquitetura
+- **Issues**: Para dúvidas e sugestões
+- **Pull Requests**: Para contribuições
+- **Discussões**: Para conversas mais longas
 
 ---
 
-**[⬆ Voltar ao início](README.md)**
+**Simples assim!** Edite Markdown, faça push, e pronto. 🚀

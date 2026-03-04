@@ -1,281 +1,203 @@
-![QBEM Logo](https://images.squarespace-cdn.com/content/v1/6298b052e407667e7e44c2ed/4051d667-ae53-469a-8465-b3598180b2f5/Logo-QBem---Ecossistema-Quiver.png)
-
 # QBEM Standards
 
-> Padronizações Oficiais para Desenvolvimento de Serviços
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-
-**Autonomia aos times · Consistência organizacional · Qualidade e segurança**
-
-📖 [Documentação](#-documentação-por-domínio) · 🚀 [Como Usar](#-como-usar) · 🤝 [Contribuir](CONTRIBUTING.md) · 📝 [ADRs](adr/)
+> Documentação oficial de padrões técnicos para desenvolvimento de software
 
 ---
 
-## 📖 Sobre
+## Sobre os Padrões
 
-Este repositório concentra as **padronizações oficiais** da QBEM para desenvolvimento de serviços, APIs, eventos assíncronos, webhooks, observabilidade e segurança.
+Este é o **catálogo oficial de padrões técnicos** da QBEM. Aqui você encontra convenções, boas práticas e diretrizes para desenvolvimento de:
 
-### 🎯 Objetivos
+- APIs HTTP RESTful
+- Comunicação assíncrona (eventos e mensageria)
+- Segurança de aplicações
+- Observabilidade e monitoramento
+- Arquitetura de software
 
-- ✅ **Autonomia** — Times têm liberdade para escolher tecnologias
-- ✅ **Consistência** — Padrões garantem interoperabilidade entre serviços
-- ✅ **Qualidade** — Documentação e validação automatizada
-- ✅ **Segurança** — Práticas de segurança desde o início
-
----
-
-## 📚 Documentação por Domínio
-
-### ![globe](https://api.iconify.design/lucide:globe.svg?color=%234a9eff&width=20) [APIs HTTP](apis/)
-
-Convenções completas para desenvolvimento de APIs RESTful.
-
-- ![file-text](https://api.iconify.design/lucide:file-text.svg?width=16) [Convenções Gerais](apis/conventions.md) — Recursos, métodos, paginação, cache
-- ![alert-circle](https://api.iconify.design/lucide:alert-circle.svg?width=16) [Modelo de Erros RFC 7807](apis/error-model.md) — Tratamento padronizado de erros
-- ![file-code](https://api.iconify.design/lucide:file-code.svg?width=16) [Guia de Estilo OpenAPI](apis/openapi-style-guide.md) — Como escrever contratos OpenAPI 3.1
-- ![git-branch](https://api.iconify.design/lucide:git-branch.svg?width=16) [Versionamento](apis/versioning.md) — Estratégias de versionamento e breaking changes
-- ![lightbulb](https://api.iconify.design/lucide:lightbulb.svg?width=16) [Exemplos](apis/examples/) — Contratos e coleções Postman de referência
-
-**Status:** ✅ Completo
+**Objetivo**: Garantir consistência, qualidade e interoperabilidade entre todos os serviços da organização.
 
 ---
 
-### ![zap](https://api.iconify.design/lucide:zap.svg?color=%23ffd700&width=20) [Mensageria Assíncrona](async/)
+## Índice de Padrões
+
+### [APIs HTTP](apis/)
+
+Padrões para desenvolvimento de APIs RESTful.
+
+- [Convenções Gerais](apis/conventions.md) — Recursos, verbos HTTP, paginação, filtros
+- [Modelo de Erros RFC 7807](apis/error-model.md) — Padronização de respostas de erro
+- [Guia de Estilo OpenAPI](apis/openapi-style-guide.md) — Como documentar APIs com OpenAPI 3.1
+- [Versionamento](apis/versioning.md) — Estratégias de versionamento e breaking changes
+
+**Status**: ✅ Completo
+
+---
+
+### [Mensageria Assíncrona](async/)
 
 Padrões para eventos, filas e streaming.
 
-- ![file-text](https://api.iconify.design/lucide:file-text.svg?width=16) [Convenções](async/conventions.md) — Nomes, envelopes, headers, idempotência
-- ![tag](https://api.iconify.design/lucide:tag.svg?width=16) [Headers Padrão](async/headers.md) — Correlação, trace, schema version por broker
-- ![git-branch](https://api.iconify.design/lucide:git-branch.svg?width=16) [Evolução de Schemas](async/schema-evolution.md) — Compatibilidade e versionamento
-- ![shield-check](https://api.iconify.design/lucide:shield-check.svg?width=16) [Confiabilidade](async/reliability.md) — Retries, DLQ, timeouts, circuit breaker
-- ![lock](https://api.iconify.design/lucide:lock.svg?width=16) [Segurança](async/security.md) — Criptografia, autenticação, ACLs, HMAC
-- ![lightbulb](https://api.iconify.design/lucide:lightbulb.svg?width=16) [Exemplos](async/examples/) — AsyncAPI, Protobuf e JSON de referência
+- [Convenções](async/conventions.md) — Nomenclatura, formato de eventos, idempotência
+- [Headers Padrão](async/headers.md) — Metadados obrigatórios (correlação, trace, versão)
+- [Evolução de Schemas](async/schema-evolution.md) — Compatibilidade e versionamento
+- [Confiabilidade](async/reliability.md) — Retries, DLQ, timeouts, circuit breaker
+- [Segurança](async/security.md) — TLS, ACLs, autenticação, HMAC
 
-**Status:** ✅ Completo
-
----
-
-### ![webhook](https://api.iconify.design/lucide:webhook.svg?color=%23ff6b6b&width=20) [Webhooks](webhooks/)
-
-Guias para design e implementação de webhooks.
-
-- ![package](https://api.iconify.design/lucide:package.svg?width=16) Design de payloads
-- ![shield](https://api.iconify.design/lucide:shield.svg?width=16) Segurança com HMAC
-- ![repeat](https://api.iconify.design/lucide:repeat.svg?width=16) Estratégias de retry
-- ![code](https://api.iconify.design/lucide:code.svg?width=16) Exemplos de implementação
-
-**Status:** 🚧 Em desenvolvimento
+**Status**: ✅ Completo
 
 ---
 
-### ![bar-chart](https://api.iconify.design/lucide:bar-chart.svg?color=%2351cf66&width=20) [Observabilidade](observability/)
-
-Padrões de logs, métricas e tracing.
-
-- ![file-json](https://api.iconify.design/lucide:file-json.svg?width=16) Logs estruturados (JSON)
-- ![activity](https://api.iconify.design/lucide:activity.svg?width=16) Métricas com OpenTelemetry
-- ![network](https://api.iconify.design/lucide:network.svg?width=16) Distributed tracing
-- ![gauge](https://api.iconify.design/lucide:gauge.svg?width=16) Dashboards e alertas
-
-**Status:** 🚧 Em desenvolvimento
-
----
-
-### ![shield](https://api.iconify.design/lucide:shield.svg?color=%23ff6b6b&width=20) [Segurança](security/)
+### [Segurança](security/)
 
 Práticas de segurança para toda a stack.
 
-- ![key](https://api.iconify.design/lucide:key.svg?width=16) [Gestão de Segredos](security/secrets-management.md) — Vault, rotação, detecção de vazamento
-- ![shield-check](https://api.iconify.design/lucide:shield-check.svg?width=16) [Autenticação & Autorização](security/auth.md) — OAuth 2.0, JWT, RBAC, mTLS
-- ![globe](https://api.iconify.design/lucide:globe.svg?width=16) [Segurança de APIs](security/api-security.md) — Rate limiting, validação, OWASP API Top 10
-- ![database](https://api.iconify.design/lucide:database.svg?width=16) [Proteção de Dados](security/data-protection.md) — Criptografia, LGPD, direitos dos titulares
-- ![package-check](https://api.iconify.design/lucide:package-check.svg?width=16) Auditoria de dependências
-- ![search](https://api.iconify.design/lucide:search.svg?width=16) Threat modeling
-- ![bug](https://api.iconify.design/lucide:bug.svg?width=16) Testes de segurança
-- ![file-check](https://api.iconify.design/lucide:file-check.svg?width=16) Compliance e LGPD
+- [Gestão de Segredos](security/secrets-management.md) — Vault, rotação, detecção de vazamento
+- [Autenticação & Autorização](security/auth.md) — OAuth 2.0, JWT, RBAC, mTLS
+- [Segurança de APIs](security/api-security.md) — Rate limiting, validação, OWASP API Top 10
+- [Proteção de Dados & LGPD](security/data-protection.md) — Criptografia, privacidade, compliance
 
-**Status:** ✅ Completo (base) · 🚧 Expansão contínua
+**Status**: ✅ Completo (base)
 
 ---
 
-### ![wrench](https://api.iconify.design/lucide:wrench.svg?color=%23868e96&width=20) [Ferramentas](tooling/)
+### [Webhooks](webhooks/)
 
-Linters, validadores e automações.
+Design e implementação de webhooks seguros.
 
-- ![check-circle](https://api.iconify.design/lucide:check-circle.svg?width=16) [Spectral para OpenAPI](tooling/spectral/) — Validação de contratos
-- ![git-commit](https://api.iconify.design/lucide:git-commit.svg?width=16) Pre-commit hooks
-- ![workflow](https://api.iconify.design/lucide:workflow.svg?width=16) CI/CD pipelines
-- ![clipboard-check](https://api.iconify.design/lucide:clipboard-check.svg?width=16) Checklists automatizados
-
-**Status:** 🚧 Em desenvolvimento
+**Status**: 🚧 Em desenvolvimento
 
 ---
 
-### ![clipboard-list](https://api.iconify.design/lucide:clipboard-list.svg?color=%234a9eff&width=20) [Checklists](checklists/)
+### [Observabilidade](observability/)
 
-Checklists para diferentes cenários.
+Logs, métricas e distributed tracing.
 
-- ![plus-circle](https://api.iconify.design/lucide:plus-circle.svg?width=16) Novo serviço
-- ![globe](https://api.iconify.design/lucide:globe.svg?width=16) Nova API
-- ![zap](https://api.iconify.design/lucide:zap.svg?width=16) Novo evento
-- ![eye](https://api.iconify.design/lucide:eye.svg?width=16) Code review
-
-**Status:** 🚧 Em desenvolvimento
+**Status**: 🚧 Em desenvolvimento
 
 ---
 
-### ![monitor](https://api.iconify.design/lucide:monitor.svg?color=%23845ef7&width=20) [Frontend](frontend/)
+### [Ferramentas](tooling/)
+
+Linters, validadores e automação.
+
+- [Spectral para OpenAPI](tooling/spectral/) — Validação de contratos
+
+**Status**: 🚧 Em desenvolvimento
+
+---
+
+### [Checklists](checklists/)
+
+Checklists de qualidade para diferentes cenários.
+
+**Status**: 🚧 Em desenvolvimento
+
+---
+
+### [Frontend](frontend/)
 
 Padrões para aplicações frontend.
 
-- ![code-2](https://api.iconify.design/lucide:code-2.svg?width=16) Convenções de código
-- ![folder-tree](https://api.iconify.design/lucide:folder-tree.svg?width=16) Estrutura de projetos
-- ![gauge](https://api.iconify.design/lucide:gauge.svg?width=16) Performance e acessibilidade
-
-**Status:** 🚧 Em desenvolvimento
+**Status**: 🚧 Em desenvolvimento
 
 ---
 
-### ![book-open](https://api.iconify.design/lucide:book-open.svg?color=%23ff922b&width=20) [ADRs - Architecture Decision Records](adr/)
+### [ADRs](adr/)
 
-Histórico de decisões arquiteturais importantes.
+Architecture Decision Records — histórico de decisões técnicas.
 
-- ![file-text](https://api.iconify.design/lucide:file-text.svg?width=16) [Template de ADR](adr/0000-template.md)
-- ![list](https://api.iconify.design/lucide:list.svg?width=16) [Lista de ADRs](adr/README.md)
-
-Toda decisão significativa é documentada em um ADR imutável que explica contexto, alternativas e consequências.
+- [Template](adr/0000-template.md)
+- [Lista de ADRs](adr/README.md)
 
 ---
 
-## 🚀 Como Usar
+## Convenções Gerais
 
-### ![user](https://api.iconify.design/lucide:user.svg?width=18) Para Desenvolvedores
+Todos os serviços **devem** seguir:
 
-1. ![search](https://api.iconify.design/lucide:search.svg?width=14) **Consulte a documentação relevante** → Navegue até a pasta do domínio (APIs, eventos, etc.)
-2. ![copy](https://api.iconify.design/lucide:copy.svg?width=14) **Reutilize exemplos** → Todos os exemplos são testados e validados
-3. ![check-square](https://api.iconify.design/lucide:check-square.svg?width=14) **Valide seus contratos** → Use as ferramentas em `/tooling` para validar OpenAPI/AsyncAPI
-4. ![clipboard-check](https://api.iconify.design/lucide:clipboard-check.svg?width=14) **Siga os checklists** → Garanta que nada foi esquecido
+### Commits e Versionamento
 
-### ![users](https://api.iconify.design/lucide:users.svg?width=18) Para Tech Leads
+- **[Conventional Commits](https://conventionalcommits.org)** — `feat:`, `fix:`, `docs:`, etc.
+- **[Semantic Versioning](https://semver.org)** — MAJOR.MINOR.PATCH
 
-1. ![shield-check](https://api.iconify.design/lucide:shield-check.svg?width=14) **Garanta conformidade** → Revise se novos serviços seguem os padrões
-2. ![message-circle](https://api.iconify.design/lucide:message-circle.svg?width=14) **Contribua com feedback** → Padrões evoluem com aprendizados dos times
-3. ![file-edit](https://api.iconify.design/lucide:file-edit.svg?width=14) **Documente exceções** → Quando necessário desviar, documente o motivo
+### Documentação Técnica
 
-### ![compass](https://api.iconify.design/lucide:compass.svg?width=18) Para Arquitetos
+- **OpenAPI 3.1** para APIs HTTP
+- **AsyncAPI 3.0** ou **Protobuf** para eventos
+- Documentação em português, código em inglês
 
-1. ![trending-up](https://api.iconify.design/lucide:trending-up.svg?width=14) **Evolua os padrões** → Proponha melhorias via RFC
-2. ![book-open](https://api.iconify.design/lucide:book-open.svg?width=14) **Crie ADRs** → Documente decisões importantes
-3. ![layers](https://api.iconify.design/lucide:layers.svg?width=14) **Mantenha consistência** → Revise PRs e garanta alinhamento
+### Observabilidade
 
----
+- Logs estruturados (JSON)
+- Métricas expostas e padronizadas
+- Distributed tracing com correlation IDs
 
-## 📐 Convenções Gerais
+### Segurança
 
-Todos os serviços devem seguir:
-
-### ![git-commit](https://api.iconify.design/lucide:git-commit.svg?width=18) Commits e Versionamento
-
-- ✅ **[Conventional Commits](https://conventionalcommits.org)** — `feat:`, `fix:`, `docs:`, etc.
-- ✅ **[Semantic Versioning](https://semver.org)** — MAJOR.MINOR.PATCH
-
-### ![book](https://api.iconify.design/lucide:book.svg?width=18) Documentação
-
-- ✅ **OpenAPI 3.1** para APIs HTTP
-- ✅ **AsyncAPI 3.0** ou **Protobuf** para eventos
-- ✅ Português para docs internas, inglês para código
-
-### ![eye](https://api.iconify.design/lucide:eye.svg?width=18) Observabilidade
-
-- ✅ Logs estruturados em JSON
-- ✅ Métricas expostas e padronizadas
-- ✅ Tracing distribuído com correlation IDs
-
-### ![lock](https://api.iconify.design/lucide:lock.svg?width=18) Segurança
-
-- ✅ HMAC para webhooks
-- ✅ Secrets via Vault/Secret Manager
-- ✅ Dependências auditadas regularmente
-- ✅ TLS obrigatório
+- TLS 1.2+ obrigatório
+- Secrets via Vault/Secret Manager
+- Dependências auditadas (sem vulnerabilidades CRITICAL)
+- Autenticação e autorização em todos os endpoints sensíveis
 
 ---
 
-## 🔄 Evolução dos Padrões
+## Como Usar
 
-Os padrões são **vivos** e evoluem continuamente:
+### Para Desenvolvedores
 
-1. ![lightbulb](https://api.iconify.design/lucide:lightbulb.svg?width=14) **Proposta** → Abra issue ou PR com RFC curta
-2. ![message-square](https://api.iconify.design/lucide:message-square.svg?width=14) **Discussão** → Feedback da comunidade (até 5 dias úteis)
-3. ![check-circle](https://api.iconify.design/lucide:check-circle.svg?width=14) **Decisão** → Aprovação pelos CODEOWNERS
-4. ![book-open](https://api.iconify.design/lucide:book-open.svg?width=14) **ADR** → Decisão documentada em `/adr`
-5. ![code](https://api.iconify.design/lucide:code.svg?width=14) **Implementação** → Atualização dos padrões e ferramentas
+1. Consulte o padrão relevante ao seu domínio (API, eventos, etc.)
+2. Siga as convenções documentadas
+3. Use os exemplos como referência
+4. Valide com as ferramentas disponíveis
 
-Veja [GOVERNANCE.md](GOVERNANCE.md) para detalhes do processo.
+### Para Tech Leads
 
----
+1. Revise se novos serviços seguem os padrões
+2. Contribua com feedback e melhorias
+3. Documente exceções quando necessário
 
-## 📖 Documentação Online
+### Para Arquitetos
 
-A documentação completa está disponível online via GitHub Pages:
-
-🌐 **https://qbem-repos.github.io/standards/**
-
-### ![computer](https://api.iconify.design/lucide:computer.svg?width=18) Desenvolvimento Local
-
-Para visualizar e editar a documentação localmente:
-
-```bash
-# Instalar dependências (opcional - apenas para dev local)
-bundle install
-
-# Iniciar servidor local
-bundle exec jekyll serve --livereload
-
-# Acessar http://localhost:4000/standards/
-```
-
-> **Nota**: O GitHub Pages usa Jekyll nativamente. Nenhuma dependência extra é necessária para deploy - apenas faça push para `main`.
-
-Veja [DEVELOPMENT.md](DEVELOPMENT.md) para instruções completas.
+1. Evolua os padrões via RFC
+2. Crie ADRs para decisões importantes
+3. Mantenha consistência através de code reviews
 
 ---
 
-## 🤝 Contribuindo
+## Processo de Evolução
 
-Contribuições são bem-vindas! Este repositório é colaborativo.
+Os padrões evoluem através de:
 
-### ![git-pull-request](https://api.iconify.design/lucide:git-pull-request.svg?width=18) Como Contribuir
+1. **Proposta** — Issue ou PR com RFC
+2. **Discussão** — Feedback da comunidade (5 dias úteis)
+3. **Decisão** — Aprovação pelos CODEOWNERS
+4. **ADR** — Decisão documentada
+5. **Implementação** — Atualização dos padrões
 
-1. ![book-open](https://api.iconify.design/lucide:book-open.svg?width=14) Leia [CONTRIBUTING.md](CONTRIBUTING.md)
-2. ![git-fork](https://api.iconify.design/lucide:git-fork.svg?width=14) Faça um fork e crie um branch
-3. ![edit](https://api.iconify.design/lucide:edit.svg?width=14) Faça suas mudanças com commits convencionais
-4. ![check-square](https://api.iconify.design/lucide:check-square.svg?width=14) Valide com as ferramentas disponíveis
-5. ![send](https://api.iconify.design/lucide:send.svg?width=14) Abra um Pull Request explicando o contexto
-
-### ![heart](https://api.iconify.design/lucide:heart.svg?width=18) Código de Conduta
-
-Todos devem seguir nosso [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
-Respeito e colaboração são fundamentais.
+Detalhes em [GOVERNANCE.md](GOVERNANCE.md)
 
 ---
 
-## 📞 Suporte
+## Contribuindo
 
-- ![message-circle](https://api.iconify.design/lucide:message-circle.svg?width=16) **Issues** — Para dúvidas e sugestões
-- ![shield-alert](https://api.iconify.design/lucide:shield-alert.svg?width=16) **Segurança** — Veja [SECURITY.md](SECURITY.md) para reportar vulnerabilidades
-- ![mail](https://api.iconify.design/lucide:mail.svg?width=16) **Contato** — Entre em contato com o time de arquitetura
+Para contribuir com a documentação:
 
----
+1. Edite os arquivos Markdown relevantes
+2. Faça commit seguindo Conventional Commits
+3. Abra Pull Request
 
-## 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE).
+Veja [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes.
 
 ---
 
-**[⬆ Voltar ao topo](#qbem-standards)**
+## Licença
 
-Feito com ❤️ pela equipe QBEM
+[MIT License](LICENSE)
+
+---
+
+**Versão da documentação**: Atualizada automaticamente via GitHub Pages
+
+**Última atualização**: Veja histórico de commits
+
+**Mantenedores**: Veja [CODEOWNERS](.github/CODEOWNERS)
