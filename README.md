@@ -1,4 +1,4 @@
-# 📚 QBEM Standards
+# QBEM Standards
 
 > Documentação oficial de padrões técnicos para desenvolvimento de software na QBEM
 
@@ -18,9 +18,9 @@ Este é o **catálogo oficial de padrões técnicos** da QBEM. Aqui você encont
 
 ---
 
-## 📑 Índice de Padrões
+## Índice de Padrões
 
-### 🌐 [APIs HTTP](apis/)
+### [APIs HTTP](apis/)
 
 Padrões para desenvolvimento de APIs RESTful.
 
@@ -29,7 +29,7 @@ Padrões para desenvolvimento de APIs RESTful.
 - [Guia de Estilo OpenAPI](apis/openapi-style-guide.md) — Como documentar APIs com OpenAPI 3.1
 - [Versionamento](apis/versioning.md) — Estratégias de versionamento e breaking changes
 
-> **Status**: ✅ Completo
+> **Status**: Completo
 
 ---
 
@@ -43,7 +43,7 @@ Padrões para eventos, filas e streaming.
 - [Confiabilidade](async/reliability.md) — Retries, DLQ, timeouts, circuit breaker
 - [Segurança](async/security.md) — TLS, ACLs, autenticação, HMAC
 
-> **Status**: ✅ Completo
+> **Status**: Completo
 
 ---
 
@@ -56,7 +56,7 @@ Práticas de segurança para toda a stack.
 - [Segurança de APIs](security/api-security.md) — Rate limiting, validação, OWASP API Top 10
 - [Proteção de Dados & LGPD](security/data-protection.md) — Criptografia, privacidade, compliance
 
-> **Status**: ✅ Completo (base)
+> **Status**: Completo (base)
 
 ---
 
@@ -64,7 +64,7 @@ Práticas de segurança para toda a stack.
 
 Design e implementação de webhooks seguros.
 
-> **Status**: 🚧 Em desenvolvimento
+> **Status**: Em desenvolvimento
 
 ---
 
@@ -72,7 +72,7 @@ Design e implementação de webhooks seguros.
 
 Logs, métricas e distributed tracing.
 
-> **Status**: 🚧 Em desenvolvimento
+> **Status**: Em desenvolvimento
 
 ---
 
@@ -82,15 +82,15 @@ Linters, validadores e automação.
 
 - [Spectral para OpenAPI](tooling/spectral/) — Validação de contratos
 
-> **Status**: 🚧 Em desenvolvimento
+> **Status**: Em desenvolvimento
 
 ---
 
-### ✅ [Checklists](checklists/)
+### [Checklists](checklists/)
 
 Checklists de qualidade para diferentes cenários.
 
-> **Status**: 🚧 Em desenvolvimento
+> **Status**: Em desenvolvimento
 
 ---
 
@@ -98,11 +98,11 @@ Checklists de qualidade para diferentes cenários.
 
 Padrões para aplicações frontend.
 
-> **Status**: 🚧 Em desenvolvimento
+> **Status**: Em desenvolvimento
 
 ---
 
-### 📝 [ADRs](adr/)
+### [ADRs](adr/)
 
 Architecture Decision Records — histórico de decisões técnicas.
 
@@ -111,28 +111,28 @@ Architecture Decision Records — histórico de decisões técnicas.
 
 ---
 
-## 📐 Convenções Gerais
+## Convenções Gerais
 
 > Todos os serviços desenvolvidos na QBEM **devem** seguir estas convenções:
 
-### 📌 Commits e Versionamento
+### Commits e Versionamento
 
 - **[Conventional Commits](https://conventionalcommits.org)** — `feat:`, `fix:`, `docs:`, etc.
 - **[Semantic Versioning](https://semver.org)** — MAJOR.MINOR.PATCH
 
-### 📖 Documentação Técnica
+### Documentação Técnica
 
 - **OpenAPI 3.1** para APIs HTTP
 - **AsyncAPI 3.0** ou **Protobuf** para eventos
 - Documentação em português, código em inglês
 
-### 👁️ Observabilidade
+### Observabilidade
 
 - Logs estruturados (JSON)
 - Métricas expostas e padronizadas
 - Distributed tracing com correlation IDs
 
-### 🔐 Segurança
+### Segurança
 
 - TLS 1.2+ obrigatório
 - Secrets via Vault/Secret Manager
@@ -141,22 +141,22 @@ Architecture Decision Records — histórico de decisões técnicas.
 
 ---
 
-## 🚀 Como Usar
+## Como Usar
 
-### 👨‍💻 Para Desenvolvedores
+###  Para Desenvolvedores
 
 1. Consulte o padrão relevante ao seu domínio (API, eventos, etc.)
 2. Siga as convenções documentadas
 3. Use os exemplos como referência
 4. Valide com as ferramentas disponíveis
 
-### 👥 Para Tech Leads
+### Para Tech Leads
 
 1. Revise se novos serviços seguem os padrões
 2. Contribua com feedback e melhorias
 3. Documente exceções quando necessário
 
-### 🏗️ Para Arquitetos
+### Para Arquitetos
 
 1. Evolua os padrões via RFC
 2. Crie ADRs para decisões importantes
@@ -164,7 +164,7 @@ Architecture Decision Records — histórico de decisões técnicas.
 
 ---
 
-## 🔄 Processo de Evolução
+## Processo de Evolução
 
 Os padrões evoluem através de:
 
@@ -178,7 +178,7 @@ Detalhes em [GOVERNANCE.md](GOVERNANCE.md)
 
 ---
 
-## 🤝 Contribuindo
+## Contribuindo
 
 Para contribuir com a documentação:
 
@@ -190,13 +190,13 @@ Veja [CONTRIBUTING.md](CONTRIBUTING.md) para mais detalhes.
 
 ---
 
-## 📄 Licença
+## Licença
 
 [MIT License](LICENSE)
 
 ---
 
-## 📌 Informações
+## Informações
 
 - **Versão**: Atualizada automaticamente via GitHub Pages
 - **Última atualização**: Veja [histórico de commits](https://github.com/qbem-repos/standards/commits/main)
