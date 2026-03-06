@@ -24,9 +24,9 @@ Temos encontrado nos commits recentes:
 
 ## A Regra Fundamental
 
-**Se você não entende completamente o código gerado pela IA, NÃO o utilize.**
+**NÃO use IA se você não sabe como resolver o problema.**
 
-Não há exceções a esta regra.
+Se você não sabe fazer algo manualmente, não use IA para fazer por você.
 
 - Você deve ser capaz de explicar cada linha do código para um colega
 - Você deve entender por que aquela solução resolve o problema
@@ -39,19 +39,23 @@ Não há exceções a esta regra.
 
 ## Princípios
 
-### IA é Assistente, Não Autor
+### IA é Assistente, Não Professor
 
-Ferramentas de IA podem auxiliar, mas não devem ser usadas quando não houver entendimento claro do que está sendo implementado.
+Ferramentas de IA podem auxiliar a acelerar o que você JÁ SABE FAZER.
+
+IA NÃO deve ser usada para aprender ou implementar algo que você não domina.
 
 Você é o autor e responsável por todo código que commita, independente de quem ou o que o gerou.
 
-### Compreensão é Obrigatória
+### Aprenda Primeiro, Use IA Depois
 
-Código que você não entende:
-- Gera bugs difíceis de rastrear
-- Aumenta a complexidade cognitiva
-- Dificulta manutenção
-- Compromete a qualidade do produto
+Antes de usar IA para qualquer tarefa:
+
+1. Você deve SABER como fazer manualmente
+2. Você deve ENTENDER os conceitos envolvidos
+3. Você deve CONHECER as alternativas de solução
+
+Só então use IA para acelerar algo que você já domina.
 
 ### Qualidade Acima de Velocidade
 
@@ -68,7 +72,7 @@ Prefira demorar mais tempo e entregar código de qualidade do que ser rápido e 
 Estruturas padrão que você conhece e usa frequentemente.
 
 ```csharp
-// C#: Estrutura de testes
+// C#: Estrutura de testes que você JÁ conhece
 [Fact]
 public void DeveCalcularDescontoCorretamente()
 {
@@ -79,7 +83,7 @@ public void DeveCalcularDescontoCorretamente()
 ```
 
 ```python
-# Python: Estrutura de testes
+# Python: Estrutura de testes que você JÁ usa
 def test_calcular_desconto_corretamente():
     servico = DescontoService()
     resultado = servico.calcular(100, TipoCliente.PREMIUM)
@@ -88,10 +92,29 @@ def test_calcular_desconto_corretamente():
 
 ### Refatoração de Código Conhecido
 
-Quando você escreveu o código e entende completamente, IA pode ajudar a reorganizá-lo.
+**IMPORTANTE**: Você deve instruir explicitamente a IA sobre o que fazer.
+
+**Processo obrigatório para refatoração com IA**:
+
+1. Informe o design pattern ou técnica a ser aplicada
+2. Peça para a IA EXPLICAR o que vai fazer ANTES de fazer
+3. Revise a explicação
+4. Só então peça para executar
+5. Revise o código gerado linha por linha
+
+**Exemplo correto**:
+
+```
+VOCÊ: "Quero aplicar Extract Method no bloco de cálculo de total.
+Primeiro, explique quais métodos você vai extrair e por quê."
+
+IA: [Explicação detalhada]
+
+VOCÊ: "Ok, agora execute a refatoração conforme explicado."
+```
 
 ```csharp
-// C#: Extrair métodos de um bloco longo
+// C#: Refatoração com design pattern que VOCÊ escolheu
 public decimal CalcularTotal(Pedido pedido)
 {
     var subtotal = CalcularSubtotal(pedido.Itens);
@@ -100,6 +123,10 @@ public decimal CalcularTotal(Pedido pedido)
     return subtotal - desconto + frete;
 }
 ```
+
+**NÃO faça**: "IA, refatore esse código" (muito vago)
+
+**FAÇA**: "Aplicar pattern Strategy para o cálculo de desconto. Explique primeiro como vai fazer."
 
 ### Documentação de Código Existente
 
@@ -122,7 +149,7 @@ def calcular_desconto(tipo_cliente: str, valor_pedido: float) -> float:
 
 ### Testes Unitários
 
-Gerar casos de teste para lógica que você implementou.
+Gerar casos de teste para lógica que VOCÊ implementou e entende.
 
 ```python
 def test_desconto_cliente_premium():
@@ -138,9 +165,44 @@ def test_desconto_cliente_regular():
 
 ## Quando NÃO Usar IA
 
+### NUNCA Use IA Para Debugar ou Corrigir Bugs
+
+**PROIBIDO**: Pedir para IA encontrar ou corrigir bugs.
+
+```python
+# ERRADO - NÃO FAÇA ISSO
+# "IA, esse código tem um bug, conserte"
+# "IA, por que essa função não está funcionando?"
+# "IA, debug esse código"
+```
+
+**Por quê?**
+- Você não entenderá a causa raiz do problema
+- O bug pode voltar em outra forma
+- Você não aprende com o erro
+- Gera código que você não compreende
+
+**CORRETO**: Debug manual
+1. Use debugger
+2. Adicione logs
+3. Analise o stack trace
+4. Entenda a causa raiz
+5. Implemente a correção VOCÊ MESMO
+
+### NUNCA Use IA Para Corrigir Código
+
+Se o código está errado, você deve:
+
+1. Entender por que está errado
+2. Diagnosticar o problema
+3. Conhecer a solução correta
+4. Implementar a correção manualmente
+
+**Só então**, se quiser, use IA para acelerar a digitação de código boilerplate relacionado.
+
 ### Lógica de Negócio Complexa
 
-Nunca gere lógica de negócio sem compreensão total das regras.
+NUNCA gere lógica de negócio sem compreensão total das regras.
 
 ```csharp
 // C#: NÃO faça isso
@@ -157,29 +219,26 @@ public decimal CalcularImpostos(Pedido pedido)
 // Quem definiu essas categorias? Está documentado onde?
 ```
 
-### Correção de Bugs
-
-Nunca peça para IA "consertar" um bug sem diagnosticar e entender a causa raiz.
-
-```python
-# NÃO faça: "IA, conserte esse bug de autenticação"
-# FAÇA: Entenda o bug, diagnostique, então implemente a correção
-```
-
 ### Algoritmos ou Padrões Desconhecidos
 
-Se você não conhece o padrão ou algoritmo, aprenda primeiro. Não deixe IA implementar algo que você não domina.
+**Se você não conhece, NÃO USE IA.**
 
 ```csharp
-// NÃO: Pedir IA para gerar "Factory Pattern com Dependency Injection"
+// NÃO: "IA, implemente Factory Pattern com Dependency Injection"
 // se você não sabe o que são esses padrões
 
-// SIM: Estude os padrões, entenda-os, então use IA para acelerar
+// CORRETO:
+// 1. Estude Factory Pattern
+// 2. Estude Dependency Injection
+// 3. Implemente manualmente primeiro
+// 4. Depois use IA para acelerar tarefas repetitivas
 ```
+
+**Regra**: Se você não consegue implementar na mão, não peça para IA fazer.
 
 ### Código de Segurança
 
-Nunca gere código relacionado a segurança, autenticação, autorização ou criptografia sem expertise completa.
+NUNCA gere código relacionado a segurança sem expertise completa.
 
 ```python
 # NÃO faça isso
@@ -187,21 +246,21 @@ def encriptar_senha(senha):
     # Código gerado por IA sem compreensão
     pass
 
-# Faça isso - use bibliotecas estabelecidas
+# Faça isso - use bibliotecas estabelecidas que você ENTENDE
 from werkzeug.security import generate_password_hash
 hash = generate_password_hash(senha)
 ```
 
 ### Integrações Críticas
 
-Pagamentos, integrações bancárias, APIs críticas exigem compreensão total do fluxo e tratamento de erros.
+Pagamentos, integrações bancárias, APIs críticas: você deve dominar completamente.
 
 ```csharp
 // NÃO gere código de integração crítica sem domínio completo
 public async Task ProcessarPagamento(Pagamento pagamento)
 {
-    // Você deve entender completamente o fluxo de pagamento
-    // tratamento de erros, rollback, idempotência, etc.
+    // Você deve SABER implementar isso sem IA
+    // Você deve ENTENDER fluxo, erros, rollback, idempotência
 }
 ```
 
@@ -211,20 +270,49 @@ public async Task ProcessarPagamento(Pagamento pagamento)
 
 Responda honestamente antes de commitar código assistido por IA:
 
-1. Eu entendo completamente cada linha deste código?
-2. Eu consigo explicar essa solução para um colega em code review?
-3. Eu sei por que essa é a melhor abordagem para o problema?
-4. Eu conheço as alternativas e seus trade-offs?
-5. O código está simples e legível?
-6. Eu consigo manter e debugar este código no futuro?
-7. O código segue nossos padrões de qualidade?
-8. Eu testei adequadamente?
+1. Eu sei fazer isso SEM IA?
+2. Eu entendo completamente cada linha deste código?
+3. Eu consigo explicar essa solução para um colega?
+4. Eu sei por que essa é a melhor abordagem?
+5. Eu conheço as alternativas e seus trade-offs?
+6. O código está simples e legível?
+7. Eu consigo debugar e manter este código?
+8. O código segue nossos padrões de qualidade?
 
-**Se você respondeu NÃO para qualquer pergunta, não faça commit.**
+**Se você respondeu NÃO para a pergunta 1, você NÃO deveria ter usado IA.**
+
+**Se você respondeu NÃO para qualquer outra pergunta, não faça commit.**
 
 ---
 
 ## Boas Práticas
+
+### Instrua Explicitamente a IA
+
+Sempre diga à IA:
+- Qual técnica ou pattern aplicar
+- O que você espera como resultado
+- Peça explicação antes da implementação
+
+```
+ERRADO: "IA, melhore esse código"
+ERRADO: "IA, refatore esse método"
+ERRADO: "IA, otimize essa função"
+
+CERTO: "Aplicar Extract Method para separar validação de processamento. Explique primeiro."
+CERTO: "Usar Strategy Pattern para os cálculos. Descreva a estrutura antes."
+CERTO: "Implementar Repository Pattern. Mostre a hierarquia de classes primeiro."
+```
+
+### Peça Explicação Primeiro
+
+Antes de aceitar código da IA:
+
+1. Peça para explicar o que vai fazer
+2. Revise a explicação
+3. Confirme se está correto
+4. Só então peça a implementação
+5. Revise linha por linha
 
 ### Revise e Simplifique
 
@@ -243,18 +331,9 @@ def processar(pedido):
     return subtotal * (1 - desconto)
 ```
 
-### Use Como Ponto de Partida
-
-1. Peça sugestão para a IA
-2. Estude a sugestão
-3. Adapte para seu contexto
-4. Simplifique se necessário
-5. Teste completamente
-6. Documente decisões não óbvias
-
 ### Adicione Contexto
 
-Explique decisões e regras de negócio, mesmo que óbvias para você.
+Explique decisões e regras de negócio.
 
 ```csharp
 public decimal CalcularDesconto(TipoCliente tipo, decimal valor)
@@ -279,7 +358,12 @@ public decimal CalcularDesconto(TipoCliente tipo, decimal valor)
 - Problemas de segurança são SUA responsabilidade
 - Débito técnico gerado é SUA responsabilidade
 
-Não existe desculpa do tipo "mas a IA gerou assim". Você escolheu usar e commitar aquele código.
+**Não existe desculpa** do tipo:
+- "Mas a IA gerou assim"
+- "Mas a IA disse que estava certo"
+- "Mas eu não sabia fazer, então usei IA"
+
+Se você não sabe fazer, NÃO USE IA. Aprenda primeiro.
 
 ---
 
@@ -291,6 +375,8 @@ Se você não tem certeza se deve usar IA em determinada situação:
 2. Discuta em code review
 3. Na dúvida, NÃO use
 
+**Regra simples**: Se você não sabe fazer sem IA, não use IA.
+
 **É melhor demorar mais e fazer certo do que rápido e errado.**
 
 A velocidade de desenvolvimento não vale a pena se o resultado for código de baixa qualidade que gera bugs e débito técnico.
@@ -299,17 +385,22 @@ A velocidade de desenvolvimento não vale a pena se o resultado for código de b
 
 ## Resumo
 
-**Use IA para:**
-- Acelerar tarefas que você já domina
-- Gerar boilerplate e código repetitivo
-- Explorar alternativas de solução
-- Documentar código que você escreveu
+**Use IA SOMENTE para:**
+- Acelerar tarefas que você JÁ DOMINA
+- Gerar boilerplate de estruturas que você JÁ CONHECE
+- Documentar código que VOCÊ escreveu
+- Testes de código que VOCÊ implementou
 
-**NÃO use IA para:**
-- Gerar código que você não entende
+**NUNCA use IA para:**
+- Debugar ou corrigir bugs
+- Corrigir código com erro
+- Implementar algo que você não sabe fazer
 - Resolver problemas que você não compreende
-- Substituir seu aprendizado e conhecimento técnico
+- Algoritmos ou padrões que você não conhece
 - Código crítico de segurança ou integrações
+- Substituir seu aprendizado
+
+**Regra de ouro**: Se você não consegue fazer sem IA, você não pode usar IA.
 
 ---
 
