@@ -102,12 +102,13 @@ Padrões para aplicações frontend.
 
 ---
 
-### [ADRs](adr/)
+### [Boas Práticas](best-practices/)
 
-Architecture Decision Records — histórico de decisões técnicas.
+Diretrizes e políticas para desenvolvimento de software.
 
-- [Template](adr/0000-template.md)
-- [Lista de ADRs](adr/README.md)
+- [Política de Uso de IA](best-practices/ai-coding.md) — Uso responsável de ferramentas de IA no desenvolvimento
+
+> **Status**: Ativo
 
 ---
 
@@ -159,7 +160,7 @@ Architecture Decision Records — histórico de decisões técnicas.
 ### Para Arquitetos
 
 1. Evolua os padrões via RFC
-2. Crie ADRs para decisões importantes
+2. Documente decisões importantes
 3. Mantenha consistência através de code reviews
 
 ---
@@ -171,7 +172,7 @@ Os padrões evoluem através de:
 1. **Proposta** — Issue ou PR com RFC
 2. **Discussão** — Feedback da comunidade (5 dias úteis)
 3. **Decisão** — Aprovação pelos CODEOWNERS
-4. **ADR** — Decisão documentada
+4. **Documentação** — Decisão documentada
 5. **Implementação** — Atualização dos padrões
 
 Detalhes em [GOVERNANCE.md](GOVERNANCE.md)
