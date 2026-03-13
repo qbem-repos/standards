@@ -21,7 +21,6 @@ aprender com a experiência.
 * Focar no que é melhor para a comunidade.
 
 Exemplos de comportamento inaceitável:
-
 * Uso de linguagem ou imagens sexualizadas, assédio ou atenção sexual indesejada.
 * Comentários ofensivos, insultantes ou ataques pessoais.
 * Intimidação, perseguição ou assédio público ou privado.

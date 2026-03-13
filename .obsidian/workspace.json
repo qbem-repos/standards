@@ -187,4 +187,11 @@
       "canvas:Criar novo canvas": false,
       "daily-notes:Abrir a nota de hoje": false,
       "templates:Inserir modelo": false,
-      "command-palette:
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false,
+      "github-sync:Sync with Remote": false
+    }
+  },
+  "active": "320ae0265ebdd9cf",
+  "lastOpenFiles": []
+}
