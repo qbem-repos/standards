@@ -208,16 +208,15 @@ Regras:
 Repositórios de infraestrutura **devem utilizar**:
 
 ```
-infra-<tecnologia>
+infra-<projeto>
 ```
 
 Exemplos:
 
 ```
-infra-terraform
-infra-kubernetes
-infra-helm
-infra-observability
+infra-conciliacao
+infra-eb
+infra-qhealth
 ```
 
 # 13. Regras obrigatórias
