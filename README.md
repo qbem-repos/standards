@@ -67,6 +67,7 @@ Práticas de segurança para toda a stack.
 Diretrizes e políticas para desenvolvimento de software.
 
 - [Política de Uso de IA](best-practices/ai-coding.md)
+- [Git Repository Naming Standard](best-practices/git-repository-naming.md)
 
 **Status**: Ativo
 

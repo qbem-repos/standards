@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "best-practices/git-repository-naming.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "git-repository-naming"
+              "title": "README"
             }
           }
         ]
@@ -194,8 +194,10 @@
   },
   "active": "7d1a80abe92cb5b7",
   "lastOpenFiles": [
-    "best-practices/ai-coding.md",
     "best-practices/git-repository-naming.md",
+    "README.md",
+    "SECURITY.md",
+    "best-practices/ai-coding.md",
     "checklists/README.md",
     "frontend/README.md",
     "CODE_OF_CONDUCT.md"
